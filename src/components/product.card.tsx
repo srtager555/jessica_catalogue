@@ -7,6 +7,7 @@ const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
 const Card = styled.div`
 	width: 300px;
+	justify-self: center;
 `;
 
 const TitleBox = styled.div`
