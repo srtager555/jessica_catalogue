@@ -3,5 +3,6 @@ interface product {
 	category: "carne" | "embutido";
 	name: string;
 	price: number;
-	imagePath: number;
+	weight: number;
+	imagePath: string;
 }
