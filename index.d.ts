@@ -5,4 +5,5 @@ interface product {
 	price: number;
 	weight: number;
 	imagePath: string;
+	featured?: boolean;
 }
