@@ -1,5 +1,6 @@
 import { Container } from "@/styles/index.styles";
 import { Bebas_Neue, Roboto } from "next/font/google";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
@@ -26,7 +27,17 @@ const Input = styled.input`
 	text-align: center;
 `;
 
-export function Nav() {
+interface props {
+	setEntry: Dispatch<SetStateAction<string>>;
+}
+
+export function Nav({ setEntry }: props) {
+	function onChange(e: ChangeEvent<HTMLInputElement>) {
+		const value = e.currentTarget.value;
+
+		setEntry(value);
+	}
+
 	return (
 		<NavStyled>
 			<Container
@@ -40,7 +51,12 @@ export function Nav() {
 				}}
 			>
 				<Title className={BebasNeue.className}>Carnicería Rodriguez</Title>
-				<Input className={roboto.className} type="text" placeholder="Busca un producto" />
+				<Input
+					onChange={onChange}
+					className={roboto.className}
+					type="text"
+					placeholder="Busca un producto"
+				/>
 			</Container>
 		</NavStyled>
 	);
