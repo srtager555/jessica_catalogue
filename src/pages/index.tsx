@@ -21,7 +21,24 @@ export default function Home() {
 
 	useEffect(() => {
 		if (products.length > 0) {
-			setFeatured(products.filter((el) => el.featured));
+			const featured = products.filter((el) => el.featured);
+
+			if (featured.length < 10) {
+				const sortedProducts = products.sort((a, b) => {
+					if (a.name > b.name) {
+						return 1;
+					}
+					if (a.name < b.name) {
+						return -1;
+					}
+					// a must be equal to b
+					return 0;
+				});
+
+				setFeatured([...featured, ...sortedProducts.slice(0, 10 - featured.length)]);
+			} else {
+				setFeatured(featured);
+			}
 		}
 	}, [products]);
 
