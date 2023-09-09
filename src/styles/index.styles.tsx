@@ -6,8 +6,7 @@ export const Container = styled.div`
 `;
 
 export const ProductContainer = styled.div`
-	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(5, 300px);
+	grid-template-columns: repeat(5, 1fr);
 	gap: 50px;
 `;
