@@ -1,3 +1,5 @@
+type children = React.ReactNode | React.ReactNode[] | string | undefiend;
+
 interface product {
 	id: string;
 	category: "carne" | "embutido";
