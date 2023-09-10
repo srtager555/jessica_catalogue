@@ -45,8 +45,8 @@ export default function Home() {
 	}, [products]);
 
 	useEffect(() => {
-		setProducts(productsListener);
-	}, [productsListener]);
+		setProducts(productsListener.data);
+	}, [productsListener.data]);
 
 	return (
 		<>
