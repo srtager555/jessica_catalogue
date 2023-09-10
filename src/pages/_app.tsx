@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 
 import "@/styles/globals.css";
+import { Background } from "@/styles/index.styles";
 
 export default function App({ Component, pageProps }: AppProps) {
 	initializeApp({
@@ -21,10 +22,16 @@ export default function App({ Component, pageProps }: AppProps) {
 	};
 
 	if (!authConfig.emulator) {
-		connectAuthEmulator(auth, "http://localhost:1099", {
+		console.log("?");
+		connectAuthEmulator(auth, "http://localhost:9099", {
 			disableWarnings: true,
 		});
 	}
 
-	return <Component {...pageProps} />;
+	return (
+		<>
+			<Background />
+			<Component {...pageProps} />
+		</>
+	);
 }
