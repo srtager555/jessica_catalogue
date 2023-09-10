@@ -5,6 +5,13 @@ import { useAuthUserListener } from "@/hooks/useAuth";
 import { Container } from "@/styles/index.styles";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react";
+import styled from "styled-components";
+
+const Content = styled.div`
+	display: flex;
+	max-width: 1250px;
+	margin: 0 auto;
+`;
 
 interface props {
 	children: children;
@@ -45,8 +52,10 @@ export function AdminLayout({ children }: props) {
 		<AdminContext.Provider value={{ productSelector, setProductSelector }}>
 			<Container>
 				<Nav />
-				<ProductList setProductSelector={setProductSelector} />
-				{children}
+				<Content>
+					<ProductList setProductSelector={setProductSelector} />
+					{children}
+				</Content>
 			</Container>
 		</AdminContext.Provider>
 	);
