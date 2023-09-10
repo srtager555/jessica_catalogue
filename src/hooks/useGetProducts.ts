@@ -1,9 +1,16 @@
 import { Firestore } from "@/tools/firestore";
-import { collection, CollectionReference, onSnapshot } from "firebase/firestore";
+import {
+	collection,
+	CollectionReference,
+	DocumentData,
+	onSnapshot,
+	QueryDocumentSnapshot,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export function useGetProducts() {
 	const [products, setProducts] = useState<product[]>([]);
+	const [snap, setSnap] = useState<QueryDocumentSnapshot<product, DocumentData>[]>([]);
 	const db = Firestore();
 
 	useEffect(() => {
@@ -11,6 +18,7 @@ export function useGetProducts() {
 
 		const unsubcribe = onSnapshot(collectionProducts, (snap) => {
 			setProducts([]);
+			setSnap(snap.docs);
 
 			snap.forEach((doc) => {
 				setProducts((prev) => [...prev, doc.data()]);
@@ -22,5 +30,5 @@ export function useGetProducts() {
 		};
 	}, [db]);
 
-	return products;
+	return { data: products, snap };
 }
