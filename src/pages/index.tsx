@@ -5,12 +5,14 @@ import { Nav } from "@/components/Nav";
 import { Firestore } from "@/tools/firestore";
 import { ProductCard } from "@/components/product.card";
 import { searchProduct } from "@/tools/searchProduct";
+import { useGetProducts } from "@/hooks/useGetProducts";
 
 export default function Home() {
 	const [products, setProducts] = useState<product[]>([]);
 	const [featured, setFeatured] = useState<product[]>([]);
 	const [entryResult, setEntryResult] = useState<product[]>([]);
 	const [entry, setEntry] = useState<string>("");
+	const productsListener = useGetProducts();
 	const db = Firestore();
 
 	useEffect(() => {
@@ -43,20 +45,8 @@ export default function Home() {
 	}, [products]);
 
 	useEffect(() => {
-		const collectionProducts = collection(db, "/products/") as CollectionReference<product>;
-
-		const unsubcribe = onSnapshot(collectionProducts, (snap) => {
-			setProducts([]);
-
-			snap.forEach((doc) => {
-				setProducts((prev) => [...prev, doc.data()]);
-			});
-		});
-
-		return () => {
-			unsubcribe();
-		};
-	}, [db]);
+		setProducts(productsListener);
+	}, [productsListener]);
 
 	return (
 		<>
