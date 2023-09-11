@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-	width: 35%;
+	width: 40%;
 	margin-right: 50px;
 `;
 
