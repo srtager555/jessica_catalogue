@@ -9,7 +9,7 @@ import styled from "styled-components";
 
 const Content = styled.div`
 	display: flex;
-	max-width: 1250px;
+	max-width: 950px;
 	margin: 0 auto;
 `;
 
