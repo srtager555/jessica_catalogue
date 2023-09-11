@@ -15,6 +15,7 @@ const Box = styled.div`
 
 const Container = styled.div`
 	display: flex;
+	justify-content: center;
 `;
 
 const Names = styled.p`
@@ -29,6 +30,8 @@ const Input = styled.input`
 `;
 
 const Form = styled.form`
+	display: flex;
+	justify-content: space-between;
 	width: 100%;
 	padding: 30px;
 	background-color: #fff;
@@ -44,6 +47,7 @@ export default function Add() {
 		<Box>
 			<Title>Añadir producto</Title>
 			<Form>
+				<InputImage setImageUrl={setImageUrl} />
 				<Container>
 					<div>
 						<Names>Nombre</Names>
@@ -55,7 +59,6 @@ export default function Add() {
 						<Input />
 						<Input />
 					</div>
-					<InputImage setImageUrl={setImageUrl} />
 				</Container>
 				<div></div>
 			</Form>
