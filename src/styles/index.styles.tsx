@@ -218,3 +218,16 @@ export const SquareImage = (props: ImageProps) => (
 		<Image {...props} fill style={{ objectFit: "cover" }} alt={props.alt} />
 	</Square>
 );
+
+export const Form = styled.form`
+	width: 100%;
+	padding: 30px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	border-radius: 20px;
+`;
+
+export const Input = styled.input<{ m?: boolean }>`
+	display: block;
+	margin-bottom: ${({ m }) => (m ? "0" : "20px")};
+`;
