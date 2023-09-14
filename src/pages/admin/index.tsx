@@ -2,7 +2,9 @@ import { FlexContainer, Title } from "@/styles/index.styles";
 import styled from "styled-components";
 import { Roboto } from "next/font/google";
 import { InputImage } from "@/components/InputImage";
-import { useState } from "react";
+import { FormEvent, HTMLAttributes, useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { Firestore } from "@/tools/firestore";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
@@ -46,8 +48,25 @@ const Form = styled.form`
 
 export default function Add() {
 	const [imageURl, setImageUrl] = useState<any>();
+	const db = Firestore();
 
 	console.log(imageURl);
+
+	async function addCategory(e: FormEvent) {
+		e.preventDefault();
+
+		const target = e.currentTarget as typeof e.currentTarget & {
+			cate: HTMLInputElement;
+		};
+
+		if (target.cate.value === "" || target.cate.value === undefined) return;
+
+		const coll = collection(db, "/categories");
+
+		await addDoc(coll, {
+			name: target.cate.value,
+		});
+	}
 
 	return (
 		<Box>
@@ -74,9 +93,9 @@ export default function Add() {
 				</select>
 			</Form>
 			<Title>Crear una nueva Categoria</Title>
-			<Form>
+			<Form onSubmit={addCategory}>
 				<FlexContainer {...flexProps}>
-					<Input m />
+					<Input m name="cate" />
 					<button>Crear</button>
 				</FlexContainer>
 			</Form>
