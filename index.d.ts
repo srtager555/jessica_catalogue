@@ -7,4 +7,5 @@ interface product {
 	weight: number;
 	imagePath: string;
 	featured?: boolean;
+	category: string;
 }
