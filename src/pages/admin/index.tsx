@@ -6,6 +6,7 @@ import { FormEvent, HTMLAttributes, useState } from "react";
 import { addDoc, collection, doc, getDocs } from "firebase/firestore";
 import { Firestore } from "@/tools/firestore";
 import { CreateCategory } from "@/components/admin/createCat.form";
+import { DeleteCat } from "@/components/admin/deleteCat.form";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
@@ -41,7 +42,6 @@ const Input = styled.input<{ m?: boolean }>`
 
 export default function Add() {
 	const [imageURl, setImageUrl] = useState<any>();
-	const db = Firestore();
 
 	console.log(imageURl);
 
@@ -70,15 +70,7 @@ export default function Add() {
 				</select>
 			</Form>
 			<CreateCategory />
-			<Title>Eliminar una Categoria</Title>
-			<Form>
-				<FlexContainer {...flexProps}>
-					<select>
-						<option>Selecciona una categoria</option>
-					</select>
-					<button>Eliminar</button>
-				</FlexContainer>
-			</Form>
+			<DeleteCat />
 		</Box>
 	);
 }
