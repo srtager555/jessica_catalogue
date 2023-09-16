@@ -2,11 +2,18 @@ import { FlexContainer, Form, Title } from "@/styles/index.styles";
 import styled from "styled-components";
 import { Roboto } from "next/font/google";
 import { InputImage } from "@/components/InputImage";
-import { FormEvent, HTMLAttributes, useState } from "react";
-import { addDoc, collection, doc, getDocs } from "firebase/firestore";
+import { FormEvent, HTMLAttributes, useEffect, useState } from "react";
+import {
+	CollectionReference,
+	addDoc,
+	collection,
+	doc,
+	getDocs,
+	onSnapshot,
+} from "firebase/firestore";
 import { Firestore } from "@/tools/firestore";
 import { CreateCategory } from "@/components/admin/createCat.form";
-import { DeleteCat } from "@/components/admin/deleteCat.form";
+import { DeleteCat, cate } from "@/components/admin/deleteCat.form";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
@@ -42,32 +49,86 @@ const Input = styled.input<{ m?: boolean }>`
 
 export default function Add() {
 	const [imageURl, setImageUrl] = useState<any>();
+	const [categories, setCategories] = useState<cate[]>([]);
+	const db = Firestore();
 
-	console.log(imageURl);
+	async function createProduct(e: FormEvent) {
+		e.preventDefault();
+
+		const target = e.currentTarget as typeof e.currentTarget & {
+			productName: HTMLInputElement;
+			price: HTMLInputElement;
+			weight: HTMLInputElement;
+			brand: HTMLSelectElement;
+			category: HTMLSelectElement;
+		};
+
+		const prodColl = collection(db, "/products");
+
+		await addDoc(prodColl, {
+			name: target.productName.value,
+			price: target.price.value,
+			weight: target.weight.value,
+			category: target.category.value,
+			brand: target.brand.value,
+		});
+
+		//@ts-ignore
+		e.target.reset();
+	}
+
+	useEffect(() => {
+		const cateColl = collection(db, "/categories") as CollectionReference<cate>;
+
+		const unsubcribe = onSnapshot(cateColl, (snap) => {
+			setCategories([]);
+
+			snap.forEach((el) => {
+				const data = el.data();
+
+				setCategories((prev) => [...prev, data]);
+			});
+		});
+
+		return () => {
+			unsubcribe();
+		};
+	}, [db]);
 
 	return (
 		<Box>
 			<Title>Añadir producto</Title>
-			<Form style={{ marginBottom: "100px" }}>
+			<Form onSubmit={createProduct} style={{ marginBottom: "100px" }}>
 				<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
 					<InputImage setImageUrl={setImageUrl} />
 					<Container>
 						<div>
 							<Names>Nombre</Names>
 							<Names>Precio</Names>
-							<Names>Peso</Names>
+							<Names>Peso en libras</Names>
+							<Names>Marca (optional)</Names>
 						</div>
 						<div>
-							<Input />
-							<Input />
-							<Input />
+							<Input type="text" required name="productName" />
+							<Input type="text" required name="price" />
+							<Input type="text" required name="weight" />
+							<Input type="text" required name="brand" />
 						</div>
 					</Container>
 				</FlexContainer>
-				<p>Selecciona una categoria</p>
-				<select required>
-					<option>Categoria</option>
-				</select>
+				<FlexContainer styles={{ ...flexProps.styles }}>
+					<select name="category" required>
+						{categories?.length > 0 ? (
+							<option>Selecciona una categoria</option>
+						) : (
+							<option>No hay categorias</option>
+						)}
+						{categories.map((el, i) => (
+							<option key={i}>{el.name}</option>
+						))}
+					</select>
+					<button>Crear</button>
+				</FlexContainer>
 			</Form>
 			<CreateCategory />
 			<DeleteCat />
