@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 
-type cate = {
+export type cate = {
 	name: string;
 };
 
@@ -87,7 +87,7 @@ export function DeleteCat() {
 			<Title>Eliminar una Categoria</Title>
 			<Form onSubmit={deleteCat}>
 				<p style={{ marginBottom: "10px", color: "red" }}>
-					Advertencia: Se eliminar esta categoria de cada producto que la contenga
+					Advertencia: Se eliminará esta categoria de cada producto que la contenga
 				</p>
 				<FlexContainer {...flexProps}>
 					<select name="select" required>
