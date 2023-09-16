@@ -112,7 +112,7 @@ export default function Add() {
 							<Input type="text" required name="productName" />
 							<Input type="text" required name="price" />
 							<Input type="text" required name="weight" />
-							<Input type="text" required name="brand" />
+							<Input type="text" name="brand" />
 						</div>
 					</Container>
 				</FlexContainer>
