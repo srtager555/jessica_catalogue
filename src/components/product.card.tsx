@@ -17,6 +17,13 @@ const TitleBox = styled.div`
 	align-items: flex-end;
 `;
 
+const DataBox = styled.div`
+	/* width: 300px; */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`;
+
 const Title = styled.h3`
 	display: inline;
 	font-size: 2rem;
@@ -25,11 +32,6 @@ const Title = styled.h3`
 
 const Weight = styled.span`
 	font-size: 1.5rem;
-`;
-
-const Price = styled.span`
-	display: block;
-	text-align: end;
 `;
 
 const ImageBox = styled.div`
@@ -42,13 +44,17 @@ interface props {
 	name: string;
 	price: number;
 	weight: number;
+	brand?: string;
 	imagePath: string;
 }
 
-export function ProductCard({ name, price, weight, imagePath }: props) {
+export function ProductCard({ name, price, weight, brand, imagePath }: props) {
 	return (
 		<Card>
-			<Price className={roboto.className}>LPS {price}</Price>
+			<DataBox>
+				<span className={roboto.className}>{brand}</span>
+				<span className={roboto.className}>LPS {price}</span>
+			</DataBox>
 			<TitleBox>
 				<Title className={BebasNeue.className}>{name}</Title>
 				<Weight className={BebasNeue.className}>
