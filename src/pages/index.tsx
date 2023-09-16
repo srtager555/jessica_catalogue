@@ -60,6 +60,7 @@ export default function Home() {
 									name={el.name}
 									weight={el.weight}
 									price={el.price}
+									brand={el.brand}
 									imagePath={el.imagePath}
 								/>
 						  ))
@@ -68,6 +69,7 @@ export default function Home() {
 									key={index}
 									name={el.name}
 									weight={el.weight}
+									brand={el.brand}
 									price={el.price}
 									imagePath={el.imagePath}
 								/>
