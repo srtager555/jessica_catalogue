@@ -8,4 +8,5 @@ interface product {
 	imagePath: string;
 	featured?: boolean;
 	category: string;
+	brand?: string;
 }
