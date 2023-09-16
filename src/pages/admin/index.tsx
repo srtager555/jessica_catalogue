@@ -7,13 +7,15 @@ import {
 	CollectionReference,
 	addDoc,
 	collection,
-	doc,
 	getDocs,
 	onSnapshot,
+	query,
+	where,
 } from "firebase/firestore";
 import { Firestore } from "@/tools/firestore";
 import { CreateCategory } from "@/components/admin/createCat.form";
 import { DeleteCat, cate } from "@/components/admin/deleteCat.form";
+import { uploadFile } from "@/tools/storage/uploadFile";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
@@ -49,7 +51,12 @@ const Input = styled.input<{ m?: boolean }>`
 
 export default function Add() {
 	const [imageURl, setImageUrl] = useState<any>();
+	const [imageName, setImageName] = useState<string>();
+	const [refreshImage, setRefreshImage] = useState<boolean>(false);
+	const [productName, setProductName] = useState<string>("");
+	const [brandName, setBrandName] = useState<string>("");
 	const [categories, setCategories] = useState<cate[]>([]);
+	const [error, setError] = useState<any>();
 	const db = Firestore();
 
 	async function createProduct(e: FormEvent) {
@@ -63,19 +70,60 @@ export default function Add() {
 			category: HTMLSelectElement;
 		};
 
+		const { productName, price, weight, brand, category } = target;
+
+		if (!imageURl) {
+			setError("El producto debe de llevar una imagen");
+
+			return;
+		}
+
 		const prodColl = collection(db, "/products");
 
+		// comprobation to avoid issues in the images
+
+		const q = query(
+			prodColl,
+			where("name", "==", productName.value),
+			where("brand", "==", brand.value)
+		);
+		const snapshot = await getDocs(q);
+
+		if (snapshot.docs.length > 0) {
+			setError("Ya existe un producto con este nombre y marca");
+
+			return;
+		}
+
+		// uploading the image
+		await uploadFile(`products/${imageName}`, imageURl);
+
+		// adding the product to firebase
 		await addDoc(prodColl, {
-			name: target.productName.value,
-			price: target.price.value,
-			weight: target.weight.value,
-			category: target.category.value,
-			brand: target.brand.value,
+			name: productName.value,
+			price: price.value,
+			weight: weight.value,
+			category: category.value,
+			brand: brand.value,
 		});
 
+		// restoring the form, the input image and the Error state
 		//@ts-ignore
 		e.target.reset();
+		setError(undefined);
+		setRefreshImage(true);
 	}
+
+	// image name listener
+	useEffect(() => {
+		setImageName(`${productName.replaceAll(" ", "_")}_${brandName.replaceAll(" ", "_")}`);
+	}, [productName, brandName]);
+
+	useEffect(() => {
+		// refresh input image xdxdxd
+
+		setTimeout(() => setRefreshImage(false));
+	}, [refreshImage]);
 
 	useEffect(() => {
 		const cateColl = collection(db, "/categories") as CollectionReference<cate>;
@@ -99,8 +147,11 @@ export default function Add() {
 		<Box>
 			<Title>Añadir producto</Title>
 			<Form onSubmit={createProduct} style={{ marginBottom: "100px" }}>
+				{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
 				<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
-					<InputImage setImageUrl={setImageUrl} />
+					{!refreshImage && (
+						<InputImage setImageUrl={setImageUrl} customImageName={imageName} />
+					)}
 					<Container>
 						<div>
 							<Names>Nombre</Names>
@@ -109,10 +160,23 @@ export default function Add() {
 							<Names>Marca (optional)</Names>
 						</div>
 						<div>
-							<Input type="text" required name="productName" />
+							<Input
+								onChange={(e) => {
+									setProductName(e.currentTarget.value);
+								}}
+								type="text"
+								required
+								name="productName"
+							/>
 							<Input type="text" required name="price" />
-							<Input type="text" required name="weight" />
-							<Input type="text" name="brand" />
+							<Input type="number" required name="weight" />
+							<Input
+								onChange={(e) => {
+									setBrandName(e.currentTarget.value);
+								}}
+								type="text"
+								name="brand"
+							/>
 						</div>
 					</Container>
 				</FlexContainer>
@@ -124,7 +188,9 @@ export default function Add() {
 							<option>No hay categorias</option>
 						)}
 						{categories.map((el, i) => (
-							<option key={i}>{el.name}</option>
+							<option key={i} value={el.name}>
+								{el.name}
+							</option>
 						))}
 					</select>
 					<button>Crear</button>
