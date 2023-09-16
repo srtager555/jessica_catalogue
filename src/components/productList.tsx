@@ -11,6 +11,7 @@ const Container = styled.div`
 const Button = styled.button`
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	width: 100%;
 	text-align: start;
 	background-color: #fff;
@@ -44,7 +45,13 @@ export function ProductList({ setProductSelector }: props) {
 
 				return (
 					<Button key={i} onClick={() => onClick(el.id)}>
-						{data.name} | {data.price} LPS <Select>Seleccionar</Select>
+						<div>
+							{data.brand && `${data.brand} | `} {data.name}
+							<span style={{ display: "block", marginTop: "5px" }}>
+								{data.price} LPS
+							</span>
+						</div>
+						<Select>Selec.</Select>
 					</Button>
 				);
 			})}
