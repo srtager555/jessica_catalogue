@@ -50,7 +50,7 @@ const Input = styled.input<{ m?: boolean }>`
 `;
 
 export default function Add() {
-	const [imageURl, setImageUrl] = useState<any>();
+	const [imageURl, setImageUrl] = useState<File>();
 	const [imageName, setImageName] = useState<string>();
 	const [refreshImage, setRefreshImage] = useState<boolean>(false);
 	const [productName, setProductName] = useState<string>("");
@@ -95,17 +95,17 @@ export default function Add() {
 			return;
 		}
 
-		// uploading the image
-		await uploadFile(`products/${imageName}`, imageURl);
-
 		// adding the product to firebase
-		await addDoc(prodColl, {
+		const data = await addDoc(prodColl, {
 			name: productName.value,
 			price: price.value,
 			weight: weight.value,
 			category: category.value,
 			brand: brand.value,
 		});
+
+		// uploading the image
+		await uploadFile(`products/${data.id}/product`, imageURl);
 
 		// restoring the form, the input image and the Error state
 		//@ts-ignore
@@ -150,7 +150,7 @@ export default function Add() {
 				{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
 				<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
 					{!refreshImage && (
-						<InputImage setImageUrl={setImageUrl} customImageName={imageName} />
+						<InputImage setImageUrl={setImageUrl} customImageName="image" />
 					)}
 					<Container>
 						<div>
