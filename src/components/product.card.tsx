@@ -45,7 +45,7 @@ interface props {
 	price: number;
 	weight: number;
 	brand?: string;
-	imagePath: string;
+	imagePath?: string;
 }
 
 export function ProductCard({ name, price, weight, brand, imagePath }: props) {
