@@ -5,7 +5,6 @@ interface product {
 	name: string;
 	price: number;
 	weight: number;
-	imagePath: string;
 	featured?: boolean;
 	category: string;
 	brand?: string;
