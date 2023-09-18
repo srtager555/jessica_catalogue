@@ -1,7 +1,7 @@
 import { Form, FlexContainer } from "@/styles/index.styles";
 import styled from "styled-components";
 import { InputImage } from "../InputImage";
-import { collection, CollectionReference, doc, onSnapshot } from "firebase/firestore";
+import { collection, CollectionReference, onSnapshot } from "firebase/firestore";
 import { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState } from "react";
 import { cate } from "./deleteCat.form";
 import { Firestore } from "@/tools/firestore";
@@ -47,6 +47,7 @@ export function FormProduct({ callback, edit }: props) {
 	const [defaultImage, setDefaultImage] = useState<string>();
 	const [imageURl, setImageUrl] = useState<File>();
 	const [refreshImage, setRefreshImage] = useState<boolean>(false);
+	const [refreshInputs, setRefreshInputs] = useState<boolean>(false);
 	const [categories, setCategories] = useState<cate[]>([]);
 	const [error, setError] = useState<string>();
 	const db = Firestore();
@@ -94,10 +95,18 @@ export function FormProduct({ callback, edit }: props) {
 			const url = await getImage(`/products/${product.id}/product`);
 
 			setDefaultImage(url);
+
+			setRefreshInputs(true);
 		}
 
 		getProduct();
 	}, [adminContext?.productSelector, db]);
+
+	useEffect(() => {
+		if (router.asPath != "/admin/edit") return;
+
+		if (refreshInputs) setRefreshInputs(false);
+	}, [refreshInputs, router.asPath]);
 
 	useEffect(() => {
 		if (router.asPath === "/admin/edit" || router.asPath === "/admin/edit/") return;
@@ -105,6 +114,7 @@ export function FormProduct({ callback, edit }: props) {
 		setTimeout(() => {
 			setDefaultImage(undefined);
 			setDefaultEditData(undefined);
+			setRefreshInputs(false);
 			adminContext?.setProductSelector(undefined);
 		}, 200);
 
@@ -114,69 +124,81 @@ export function FormProduct({ callback, edit }: props) {
 	return edit && !defaultEditData ? (
 		<>Para comenzar debes de seleccionar un producto a la izquierda</>
 	) : (
-		<Form onSubmit={onSubmit} style={{ marginBottom: "100px" }}>
-			{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
-			<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
-				{!refreshImage && (
-					<InputImage
-						setImageUrl={setImageUrl}
-						customImageName="image"
-						previewImage={defaultImage}
-					/>
-				)}
-				<Container>
-					<div>
-						<Names>Nombre</Names>
-						<Names>Precio</Names>
-						<Names>Peso en libras</Names>
-						<Names>Marca (optional)</Names>
-					</div>
-					<div>
-						<Input
-							type="text"
-							required={!edit}
-							name="productName"
-							value={defaultEditData?.name ? defaultEditData?.name : ""}
+		!refreshInputs && (
+			<Form onSubmit={onSubmit} style={{ marginBottom: "100px" }}>
+				{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
+				<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
+					{!refreshImage && (
+						<InputImage
+							setImageUrl={setImageUrl}
+							customImageName="image"
+							previewImage={defaultImage}
 						/>
-						<Input
-							type="text"
-							required={!edit}
-							name="price"
-							value={defaultEditData?.price ? defaultEditData?.price : ""}
-						/>
-						<Input
-							type="number"
-							required={!edit}
-							name="weight"
-							value={defaultEditData?.weight ? defaultEditData?.weight : ""}
-						/>
-						<Input
-							type="text"
-							name="brand"
-							value={defaultEditData?.brand ? defaultEditData?.brand : ""}
-						/>
-					</div>
-				</Container>
-			</FlexContainer>
-			<FlexContainer styles={{ ...flexProps.styles }}>
-				<select
-					name="category"
-					required
-					value={defaultEditData?.category ? defaultEditData?.category : ""}
-				>
-					{categories?.length > 0 ? (
-						<option>Selecciona una categoria</option>
-					) : (
-						<option>No hay categorias</option>
 					)}
-					{categories.map((el, i) => (
-						<option key={i} value={el.name}>
-							{el.name}
-						</option>
-					))}
-				</select>
-				<button>{edit ? "Actualizar" : "Crear"}</button>
-			</FlexContainer>
-		</Form>
+					<Container>
+						<div>
+							<Names>Nombre</Names>
+							<Names>Precio</Names>
+							<Names>Peso en libras</Names>
+							<Names>Marca (optional)</Names>
+						</div>
+						<div>
+							<>
+								<Input
+									type="text"
+									required={!edit}
+									name="productName"
+									defaultValue={
+										defaultEditData?.name ? defaultEditData?.name : ""
+									}
+								/>
+								<Input
+									type="text"
+									required={!edit}
+									name="price"
+									defaultValue={
+										defaultEditData?.price ? defaultEditData?.price : ""
+									}
+								/>
+								<Input
+									type="number"
+									required={!edit}
+									name="weight"
+									defaultValue={
+										defaultEditData?.weight ? defaultEditData?.weight : ""
+									}
+								/>
+								<Input
+									type="text"
+									name="brand"
+									defaultValue={
+										defaultEditData?.brand ? defaultEditData?.brand : ""
+									}
+								/>
+							</>
+						</div>
+					</Container>
+				</FlexContainer>
+				<FlexContainer styles={{ ...flexProps.styles }}>
+					<select
+						name="category"
+						required
+						defaultValue={defaultEditData?.category ? defaultEditData?.category : ""}
+					>
+						{categories?.length > 0 ? (
+							<option>Selecciona una categoria</option>
+						) : (
+							<option>No hay categorias</option>
+						)}
+						{categories.map((el, i) => (
+							<option key={i} defaultValue={el.name}>
+								{el.name}
+							</option>
+						))}
+					</select>
+					<button>{edit ? "Actualizar" : "Crear"}</button>
+				</FlexContainer>
+			</Form>
+		)
 	);
 }
