@@ -60,6 +60,15 @@ export const Title = styled.h2`
 	font-style: ${BebasNeue.style.fontStyle};
 `;
 
+export const TitleH3 = styled.h3`
+	font-size: 1.5rem;
+	margin: 0;
+	margin-bottom: 5px;
+	font-family: ${BebasNeue.style.fontFamily};
+	font-weight: ${BebasNeue.style.fontWeight};
+	font-style: ${BebasNeue.style.fontStyle};
+`;
+
 // Recycled
 
 // Function to process props and convert them into valid css styles
