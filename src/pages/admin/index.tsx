@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Roboto } from "next/font/google";
-import { Dispatch, FormEvent, SetStateAction } from "react";
+import { Dispatch, FormEvent, SetStateAction, useContext, useEffect } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { Firestore } from "@/tools/firestore";
 import { CreateCategory } from "@/components/admin/createCat.form";
@@ -8,6 +8,7 @@ import { DeleteCat } from "@/components/admin/deleteCat.form";
 import { uploadFile } from "@/tools/storage/uploadFile";
 import { FormProduct } from "@/components/admin/form.product";
 import { Title } from "@/styles/index.styles";
+import { AdminContext } from "@/layout/admin";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ const Box = styled.div`
 `;
 
 export default function Add() {
+	const adminContext = useContext(AdminContext);
 	const db = Firestore();
 
 	async function createProduct(
@@ -80,6 +82,12 @@ export default function Add() {
 		setError(undefined);
 		setRefreshImage(true);
 	}
+
+	useEffect(() => {
+		if (adminContext?.productSelector) {
+			adminContext?.setProductSelector(undefined);
+		}
+	}, [adminContext?.setProductSelector, adminContext?.productSelector, adminContext]);
 
 	return (
 		<Box>
