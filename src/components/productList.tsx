@@ -1,5 +1,7 @@
 import { useGetProducts } from "@/hooks/useGetProducts";
 import { Title } from "@/styles/index.styles";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
@@ -27,14 +29,21 @@ const Select = styled.span`
 `;
 
 interface props {
-	setProductSelector: Dispatch<SetStateAction<string | undefined>>;
+	setProductSelector: Dispatch<
+		SetStateAction<QueryDocumentSnapshot<product, DocumentData> | undefined>
+	>;
 }
 
 export function ProductList({ setProductSelector }: props) {
 	const productsListener = useGetProducts().snap;
+	const router = useRouter();
 
-	function onClick(id: string) {
-		setProductSelector(id);
+	function onClick(snap: QueryDocumentSnapshot<product, DocumentData>) {
+		router.push("/admin/edit");
+
+		setTimeout(() => {
+			setProductSelector(snap);
+		}, 500);
 	}
 
 	return (
@@ -44,7 +53,7 @@ export function ProductList({ setProductSelector }: props) {
 				const data = el.data();
 
 				return (
-					<Button key={i} onClick={() => onClick(el.id)}>
+					<Button key={i} onClick={() => onClick(el)}>
 						<div>
 							{data.brand && `${data.brand} | `} {data.name}
 							<span style={{ display: "block", marginTop: "5px" }}>
