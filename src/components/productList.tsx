@@ -39,11 +39,15 @@ export function ProductList({ setProductSelector }: props) {
 	const router = useRouter();
 
 	function onClick(snap: QueryDocumentSnapshot<product, DocumentData>) {
-		router.push("/admin/edit");
+		if (router.asPath === "/admin/" || router.asPath === "/admin") {
+			router.push("/admin/edit");
 
-		setTimeout(() => {
+			setTimeout(() => {
+				setProductSelector(snap);
+			}, 500);
+		} else {
 			setProductSelector(snap);
-		}, 500);
+		}
 	}
 
 	return (
