@@ -7,6 +7,7 @@ import { cate } from "./deleteCat.form";
 import { Firestore } from "@/tools/firestore";
 import { AdminContext } from "@/layout/admin";
 import { getImage } from "@/tools/storage/getImage";
+import { useRouter } from "next/router";
 
 const flexProps = {
 	styles: {
@@ -45,13 +46,11 @@ export function FormProduct({ callback, edit }: props) {
 	const [defaultEditData, setDefaultEditData] = useState<product>();
 	const [defaultImage, setDefaultImage] = useState<string>();
 	const [imageURl, setImageUrl] = useState<File>();
-	const [imageName, setImageName] = useState<string>();
 	const [refreshImage, setRefreshImage] = useState<boolean>(false);
-	const [productName, setProductName] = useState<string>("");
-	const [brandName, setBrandName] = useState<string>("");
 	const [categories, setCategories] = useState<cate[]>([]);
 	const [error, setError] = useState<string>();
 	const db = Firestore();
+	const router = useRouter();
 	const adminContext = useContext(AdminContext);
 
 	function onSubmit(e: FormEvent) {
@@ -59,11 +58,6 @@ export function FormProduct({ callback, edit }: props) {
 
 		callback(e, imageURl, setError, setRefreshImage);
 	}
-
-	// image name listener
-	useEffect(() => {
-		setImageName(`${productName.replaceAll(" ", "_")}_${brandName.replaceAll(" ", "_")}`);
-	}, [productName, brandName]);
 
 	useEffect(() => {
 		// refresh input image xdxdxd
@@ -96,7 +90,7 @@ export function FormProduct({ callback, edit }: props) {
 
 			if (!product) return;
 
-			setDefaultEditData(product?.data());
+			setDefaultEditData(product.data());
 			const url = await getImage(`/products/${product.id}/product`);
 
 			setDefaultImage(url);
@@ -104,6 +98,18 @@ export function FormProduct({ callback, edit }: props) {
 
 		getProduct();
 	}, [adminContext?.productSelector, db]);
+
+	useEffect(() => {
+		if (router.asPath === "/admin/edit" || router.asPath === "/admin/edit/") return;
+
+		setTimeout(() => {
+			setDefaultImage(undefined);
+			setDefaultEditData(undefined);
+			adminContext?.setProductSelector(undefined);
+		}, 200);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [adminContext?.setProductSelector, router.asPath]);
 
 	return edit && !defaultEditData ? (
 		<>Para comenzar debes de seleccionar un producto a la izquierda</>
@@ -127,39 +133,37 @@ export function FormProduct({ callback, edit }: props) {
 					</div>
 					<div>
 						<Input
-							onChange={(e) => {
-								setProductName(e.currentTarget.value);
-							}}
 							type="text"
 							required={!edit}
 							name="productName"
-							defaultValue={defaultEditData?.name}
+							value={defaultEditData?.name ? defaultEditData?.name : ""}
 						/>
 						<Input
 							type="text"
 							required={!edit}
 							name="price"
-							defaultValue={defaultEditData?.price}
+							value={defaultEditData?.price ? defaultEditData?.price : ""}
 						/>
 						<Input
 							type="number"
 							required={!edit}
 							name="weight"
-							defaultValue={defaultEditData?.weight}
+							value={defaultEditData?.weight ? defaultEditData?.weight : ""}
 						/>
 						<Input
-							onChange={(e) => {
-								setBrandName(e.currentTarget.value);
-							}}
 							type="text"
 							name="brand"
-							defaultValue={defaultEditData?.brand}
+							value={defaultEditData?.brand ? defaultEditData?.brand : ""}
 						/>
 					</div>
 				</Container>
 			</FlexContainer>
 			<FlexContainer styles={{ ...flexProps.styles }}>
-				<select name="category" required>
+				<select
+					name="category"
+					required
+					value={defaultEditData?.category ? defaultEditData?.category : ""}
+				>
 					{categories?.length > 0 ? (
 						<option>Selecciona una categoria</option>
 					) : (
@@ -171,7 +175,7 @@ export function FormProduct({ callback, edit }: props) {
 						</option>
 					))}
 				</select>
-				<button>Crear</button>
+				<button>{edit ? "Actualizar" : "Crear"}</button>
 			</FlexContainer>
 		</Form>
 	);
