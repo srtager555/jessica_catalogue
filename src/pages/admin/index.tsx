@@ -83,12 +83,6 @@ export default function Add() {
 		setRefreshImage(true);
 	}
 
-	useEffect(() => {
-		if (adminContext?.productSelector) {
-			adminContext?.setProductSelector(undefined);
-		}
-	}, [adminContext?.setProductSelector, adminContext?.productSelector, adminContext]);
-
 	return (
 		<Box>
 			<Title>Añadir producto</Title>
