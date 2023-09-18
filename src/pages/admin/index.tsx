@@ -20,7 +20,6 @@ const Box = styled.div`
 `;
 
 export default function Add() {
-	const adminContext = useContext(AdminContext);
 	const db = Firestore();
 
 	async function createProduct(
