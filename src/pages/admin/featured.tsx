@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { AdminContext } from "@/layout/admin";
 import { SpaceBeetwenContainer, Title, TitleH3 } from "@/styles/index.styles";
 import { Firestore } from "@/tools/firestore";
@@ -76,9 +77,9 @@ export default function Featured() {
 	}
 
 	useEffect(() => {
-		//@ts-ignore
 		if (
 			first &&
+			//@ts-ignore
 			(document.referrer != "/admin/featured" || document.referrer != "/admin/featured/")
 		) {
 			adminContext?.setProductSelector(undefined);
