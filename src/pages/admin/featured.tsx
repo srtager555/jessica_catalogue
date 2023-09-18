@@ -15,6 +15,7 @@ import {
 	where,
 } from "firebase/firestore";
 import { Roboto } from "next/font/google";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -42,6 +43,7 @@ const FProduct = styled.div`
 `;
 
 const TransparentBTN = styled.button`
+	width: 100%;
 	position: relative;
 	background-color: transparent;
 	border: none;
@@ -61,10 +63,12 @@ const PInfo = styled.div`
 `;
 
 export default function Featured() {
+	const [first, setFirst] = useState(true);
 	const [featuredProducts, setFeaturedProducts] = useState<
 		QueryDocumentSnapshot<product, DocumentData>[]
 	>([]);
 	const adminContext = useContext(AdminContext);
+	const router = useRouter();
 	const db = Firestore();
 
 	async function addFeatured(p: QueryDocumentSnapshot<product, DocumentData>) {
@@ -72,12 +76,28 @@ export default function Featured() {
 	}
 
 	useEffect(() => {
+		//@ts-ignore
+		if (
+			first &&
+			(document.referrer != "/admin/featured" || document.referrer != "/admin/featured/")
+		) {
+			adminContext?.setProductSelector(undefined);
+			setFirst(false);
+			return;
+		}
+
 		const p = adminContext?.productSelector;
 
 		if (!p) return;
 
 		addFeatured(p);
-	}, [adminContext?.productSelector]);
+	}, [
+		adminContext?.setProductSelector,
+		adminContext?.productSelector,
+		router.asPath,
+		adminContext,
+		first,
+	]);
 
 	useEffect(() => {
 		const coll = collection(db, "/products") as CollectionReference<product>;
