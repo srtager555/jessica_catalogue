@@ -1,5 +1,6 @@
 import { Bebas_Neue, Roboto } from "next/font/google";
 import Image from "next/image";
+import { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
@@ -8,6 +9,19 @@ const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const Card = styled.div`
 	width: 300px;
 	justify-self: center;
+	margin-bottom: 30px;
+
+	@media (max-width: 700px) {
+		width: 250px;
+	}
+
+	@media (max-width: 580px) {
+		width: 200px;
+	}
+
+	@media (max-width: 480px) {
+		width: 100%;
+	}
 `;
 
 const TitleBox = styled.div`
@@ -34,10 +48,15 @@ const Weight = styled.span`
 	font-size: 1.5rem;
 `;
 
-const ImageBox = styled.div`
+const ImageBox = styled.div<{ cheight: number }>`
 	position: relative;
-	width: 300px;
-	height: 300px;
+	width: inherit;
+	height: ${({ cheight }) => cheight}px;
+
+	& img {
+		width: 100% !important;
+		height: 100% !important;
+	}
 `;
 
 interface props {
@@ -49,6 +68,25 @@ interface props {
 }
 
 export function ProductCard({ name, price, weight, brand, imagePath }: props) {
+	const [height, setHeight] = useState<number>(0);
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		function height() {
+			if (!ref.current) return;
+
+			console.log(ref.current.clientWidth);
+
+			setHeight(ref.current.clientWidth);
+		}
+
+		window.addEventListener("resize", height);
+
+		return () => {
+			window.removeEventListener("resize", height);
+		};
+	}, []);
+
 	return (
 		<Card>
 			<DataBox>
@@ -61,7 +99,7 @@ export function ProductCard({ name, price, weight, brand, imagePath }: props) {
 					{weight} {weight > 1 ? "LBS" : "LB"}
 				</Weight>
 			</TitleBox>
-			<ImageBox>
+			<ImageBox ref={ref} cheight={height}>
 				<Image
 					src={
 						imagePath ??
