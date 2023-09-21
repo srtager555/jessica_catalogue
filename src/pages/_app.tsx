@@ -22,11 +22,12 @@ export default function App({ Component, pageProps }: AppProps) {
 		emulator: unknown;
 	};
 
-	if (!authConfig.emulator) {
-		connectAuthEmulator(auth, "http://localhost:9099", {
-			disableWarnings: true,
-		});
-	}
+	if (process.env.NODE_ENV === "development")
+		if (!authConfig.emulator) {
+			connectAuthEmulator(auth, "http://localhost:9099", {
+				disableWarnings: true,
+			});
+		}
 
 	return (
 		<>
