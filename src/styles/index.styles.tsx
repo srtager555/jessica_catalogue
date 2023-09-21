@@ -22,9 +22,10 @@ export const Container = styled.div`
 `;
 
 export const ProductContainer = styled.div`
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 50px;
+	display: flex;
+	justify-content: space-around;
+	align-items: flex-start;
+	flex-wrap: wrap;
 `;
 
 export const Background = styled.div`
