@@ -75,10 +75,10 @@ export function ProductCard({ name, price, weight, brand, imagePath }: props) {
 		function height() {
 			if (!ref.current) return;
 
-			console.log(ref.current.clientWidth);
-
 			setHeight(ref.current.clientWidth);
 		}
+
+		height();
 
 		window.addEventListener("resize", height);
 
