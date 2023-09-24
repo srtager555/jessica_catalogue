@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import {
 	collection,
 	onSnapshot,
@@ -6,7 +6,7 @@ import {
 	QueryDocumentSnapshot,
 	DocumentData,
 } from "firebase/firestore";
-import { Container, ProductContainer } from "@/styles/index.styles";
+import { Container, ProductContainer, Title, TitleH3 } from "@/styles/index.styles";
 import { Nav } from "@/components/Nav";
 import { Firestore } from "@/tools/firestore";
 import { ProductCard } from "@/components/product.card";
@@ -16,10 +16,15 @@ import { getImage } from "@/tools/storage/getImage";
 
 type p = QueryDocumentSnapshot<product, DocumentData>[];
 
+const titleStyles: CSSProperties = {
+	marginTop: "40px",
+	textAlign: "center",
+};
+
 export default function Home() {
 	const [products, setProducts] = useState<p>([]);
 	const [featured, setFeatured] = useState<p>([]);
-	const [entryResult, setEntryResult] = useState<p>([]);
+	const [entryResult, setEntryResult] = useState<{ byName: p; byBrand: p; byCate: p }>();
 	const [entry, setEntry] = useState<string>("");
 	const productsListener = useGetProducts();
 	const db = Firestore();
@@ -61,15 +66,46 @@ export default function Home() {
 		<>
 			<Nav setEntry={setEntry} />
 			<Container>
-				<ProductContainer>
-					{entryResult.length > 0
-						? entryResult.map((el, index) => (
-								<CardRender key={index} el={el} index={index} />
-						  ))
-						: featured.map((el, index) => (
-								<CardRender key={index} el={el} index={index} />
-						  ))}
-				</ProductContainer>
+				{entryResult && Object.keys(entryResult).length > 0 ? (
+					<div>
+						{entryResult.byName.length > 0 && (
+							<>
+								<Title style={titleStyles}>coincidencias en los nombre</Title>
+								<ProductContainer>
+									{entryResult.byName.map((el, index) => (
+										<CardRender key={index} el={el} index={index} />
+									))}
+								</ProductContainer>
+							</>
+						)}
+						{entryResult.byCate.length > 0 && (
+							<>
+								<Title style={titleStyles}>coincidencias en las categorias</Title>
+								<ProductContainer>
+									{entryResult.byCate.map((el, index) => (
+										<CardRender key={index} el={el} index={index} />
+									))}
+								</ProductContainer>
+							</>
+						)}
+						{entryResult.byBrand.length > 0 && (
+							<>
+								<Title style={titleStyles}>coincidencias en las marcas</Title>
+								<ProductContainer>
+									{entryResult.byBrand.map((el, index) => (
+										<CardRender key={index} el={el} index={index} />
+									))}
+								</ProductContainer>
+							</>
+						)}
+					</div>
+				) : (
+					<ProductContainer>
+						{featured.map((el, index) => (
+							<CardRender key={index} el={el} index={index} />
+						))}
+					</ProductContainer>
+				)}
 			</Container>
 		</>
 	);
