@@ -26,6 +26,7 @@ export const ProductContainer = styled.div`
 	justify-content: space-around;
 	align-items: flex-start;
 	flex-wrap: wrap;
+	width: 100%;
 `;
 
 export const Background = styled.div`
