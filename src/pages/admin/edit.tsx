@@ -69,9 +69,10 @@ export default function Edit() {
 		const snapshot = await getDocs(q);
 
 		if (snapshot.docs.length > 0) {
-			setError("Ya existe un producto con este nombre y marca");
-
-			return;
+			if (data.category === currentData.data().category) {
+				setError("Ya existe un producto con este nombre y marca");
+				return;
+			}
 		}
 
 		// uploading the new data
