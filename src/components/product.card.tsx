@@ -100,14 +100,15 @@ export function ProductCard({ name, price, weight, brand, imagePath }: props) {
 				</Weight>
 			</TitleBox>
 			<ImageBox ref={ref} cheight={height}>
-				<Image
-					src={
-						imagePath ??
-						"https://i.ibb.co/VN0q6r2/9-C4-FB247-B3067-AE137-DACCFFBF98-E5-C2-DF85505-D.jpg"
-					}
-					fill
-					alt={name}
-				/>
+				{imagePath && (
+					<Image
+						src={imagePath}
+						fill
+						placeholder="blur"
+						blurDataURL={imagePath}
+						alt={name}
+					/>
+				)}
 			</ImageBox>
 		</Card>
 	);
