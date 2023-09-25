@@ -1,12 +1,12 @@
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
-import { compareTwoStrings, findBestMatch } from "string-similarity";
+import { findBestMatch } from "string-similarity";
 
 type p = QueryDocumentSnapshot<product, DocumentData>[];
 
 export function searchProduct(entry: string, products: p) {
 	if (entry === "") return undefined;
 	else {
-		const umbral = 0.17;
+		const umbral = 0.3;
 		const productsNames = products.map((el) => el.data().name);
 		const byNameBestMatch = findBestMatch(entry, productsNames).ratings.sort(
 			(a, b) => b.rating - a.rating
@@ -15,7 +15,7 @@ export function searchProduct(entry: string, products: p) {
 
 		byNameBestMatch.forEach((element) => {
 			const result = products.find(
-				(el) => element.rating > umbral && el.data().name === element.target
+				(el) => element.rating > 0.5 && el.data().name === element.target
 			);
 
 			if (result) byName.push(result);
@@ -60,16 +60,14 @@ export function searchProduct(entry: string, products: p) {
 				});
 		});
 
-		const bruteResults = [byCate, byName, byBrand].flat();
+		const bruteResults = [byCate.slice(0, 4), byName.slice(0, 4), byBrand.slice(0, 4)].flat();
 		const result = bruteResults.every((el) => typeof el === "undefined")
 			? undefined
 			: {
-					byCate,
-					byName,
-					byBrand,
+					byCate: byCate,
+					byName: byName.slice(0, 4),
+					byBrand: byBrand,
 			  };
-
-		console.log(result);
 
 		return result;
 	}
