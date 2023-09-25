@@ -49,14 +49,13 @@ const Weight = styled.span`
 `;
 
 const ImageBox = styled.div<{ cheight: number }>`
+	display: flex;
+	align-items: center;
 	position: relative;
 	width: inherit;
 	height: ${({ cheight }) => cheight}px;
-
-	& img {
-		width: 100% !important;
-		height: 100% !important;
-	}
+	overflow: hidden;
+	background-color: #fff;
 `;
 
 interface props {
@@ -64,10 +63,11 @@ interface props {
 	price: number;
 	weight: number;
 	brand?: string;
+	cate: string;
 	imagePath?: string;
 }
 
-export function ProductCard({ name, price, weight, brand, imagePath }: props) {
+export function ProductCard({ name, price, weight, brand, cate, imagePath }: props) {
 	const [height, setHeight] = useState<number>(0);
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -91,7 +91,10 @@ export function ProductCard({ name, price, weight, brand, imagePath }: props) {
 		<Card>
 			<DataBox>
 				<span className={roboto.className}>{brand}</span>
-				<span className={roboto.className}>LPS {price}</span>
+				<div>
+					{cate != "" && <span className={roboto.className}>{cate} - </span>}
+					<span className={roboto.className}>LPS {price}</span>
+				</div>
 			</DataBox>
 			<TitleBox>
 				<Title className={BebasNeue.className}>{name}</Title>
@@ -103,7 +106,9 @@ export function ProductCard({ name, price, weight, brand, imagePath }: props) {
 				{imagePath && (
 					<Image
 						src={imagePath}
-						fill
+						layout="responsive"
+						width={1500}
+						height={300}
 						placeholder="blur"
 						blurDataURL={imagePath}
 						alt={name}
