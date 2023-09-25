@@ -1,5 +1,10 @@
-import { collection, addDoc, getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-import { uploadFile } from "./storage/uploadFile";
+import {
+	collection,
+	addDoc,
+	getFirestore,
+	connectFirestoreEmulator,
+	CollectionReference,
+} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
 initializeApp({
@@ -18,20 +23,25 @@ connectFirestoreEmulator(db, "localhost", 8080);
 
 async function createProduct(
 	{ name, weight, brand, category }: Omit<Omit<product, "price">, "id">,
-	imageURl: File
+	imageURl: string
 ) {
-	const prodColl = collection(db, "/products");
+	const prodColl = collection(db, "/products") as CollectionReference<product>;
 
-	// adding the product to firebase
-	const data = await addDoc(prodColl, {
+	const content = {
 		name,
 		weight,
 		category,
 		brand,
-	});
+		img: imageURl,
+	};
 
-	// uploading the image
-	await uploadFile(`products/${data.id}/product`, imageURl);
+	// console.log(content);
+
+	// return;
+
+	// adding the product to firebase
+
+	await addDoc(prodColl, content as product);
 }
 
 const products = [
@@ -231,7 +241,7 @@ const products = [
 		name: "Alitas de pollo",
 		brand: "Norteño",
 		peso: 5,
-		img: "/img/products/alitas_n.jpg",
+		img: "/img/products/alistas.pollo.webp",
 		cate: "Pollo",
 	},
 
@@ -452,7 +462,7 @@ const products = [
 		name: "Alitas de Pollo",
 		brand: "El porteño",
 		peso: 0.75,
-		img: "/img/products/alistas.pollo.webp",
+		img: "/img/products/alitas_n.jpg",
 		cate: "Pollo",
 	},
 	{
@@ -474,7 +484,6 @@ export function lol() {
 			return await fetch(imagePath) // Cargamos la imagen desde la ruta
 				.then((response) => response.blob()) // Convertimos la respuesta en un blob
 				.then((blob) => {
-					console.log(blob);
 					// Creamos un objeto File a partir del blob
 					return new File([blob], "product.png", {
 						type: "image/png",
@@ -482,24 +491,14 @@ export function lol() {
 				});
 		}
 
-		// Llamamos a la función y manejamos el resultado
-		convertImageToFile(el.img)
-			.then(async (file) => {
-				console.log("Archivo convertido:", file);
-				// Ahora puedes usar el objeto 'file' como quieras, por ejemplo, subirlo a un servidor o procesarlo de alguna otra manera.
-
-				createProduct(
-					{
-						name: el.name,
-						category: el.cate ?? "",
-						brand: el.brand ?? "",
-						weight: el.peso,
-					},
-					file
-				);
-			})
-			.catch((error) => {
-				console.error("Error al convertir la imagen:", error);
-			});
+		createProduct(
+			{
+				name: el.name,
+				category: el.cate ?? "",
+				brand: el.brand ?? "",
+				weight: el.peso,
+			},
+			el.img
+		);
 	});
 }
