@@ -1,11 +1,5 @@
 import { CSSProperties, useEffect, useState } from "react";
-import {
-	collection,
-	onSnapshot,
-	CollectionReference,
-	QueryDocumentSnapshot,
-	DocumentData,
-} from "firebase/firestore";
+import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { Container, ProductContainer, Title, TitleH3 } from "@/styles/index.styles";
 import { Nav } from "@/components/Nav";
 import { Firestore } from "@/tools/firestore";
