@@ -1,8 +1,16 @@
 import { Form, FlexContainer } from "@/styles/index.styles";
 import styled from "styled-components";
 import { InputImage } from "../InputImage";
-import { collection, CollectionReference, onSnapshot } from "firebase/firestore";
-import { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState } from "react";
+import { collection, CollectionReference, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+	Dispatch,
+	FormEvent,
+	MouseEvent,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { cate } from "./deleteCat.form";
 import { Firestore } from "@/tools/firestore";
 import { AdminContext } from "@/layout/admin";
@@ -60,6 +68,16 @@ export function FormProduct({ callback, edit }: props) {
 		callback(e, imageURl, setError, setRefreshImage);
 	}
 
+	async function deleteProduct(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+		e.preventDefault();
+
+		if (adminContext?.productSelector?.id) {
+			await deleteDoc(doc(db, "/products/" + adminContext.productSelector.id));
+
+			router.push("/admin/");
+		}
+	}
+
 	useEffect(() => {
 		// refresh input image xdxdxd
 
@@ -92,7 +110,9 @@ export function FormProduct({ callback, edit }: props) {
 			if (!product) return;
 
 			setDefaultEditData(product.data());
-			const url = await getImage(`/products/${product.id}/product`);
+			const url = product.data().img
+				? product.data().img
+				: await getImage(`/products/${product.id}/product`);
 
 			setDefaultImage(url);
 
@@ -153,7 +173,7 @@ export function FormProduct({ callback, edit }: props) {
 									}
 								/>
 								<Input
-									type="text"
+									type="number"
 									required={!edit}
 									name="price"
 									defaultValue={
@@ -195,7 +215,21 @@ export function FormProduct({ callback, edit }: props) {
 							</option>
 						))}
 					</select>
-					<button>{edit ? "Actualizar" : "Crear"}</button>
+					<div>
+						{adminContext?.productSelector && (
+							<button
+								style={{
+									marginRight: "10px",
+									display: "inline-block",
+									color: "red",
+								}}
+								onClick={deleteProduct}
+							>
+								Eliminar producto
+							</button>
+						)}
+						<button>{edit ? "Actualizar" : "Crear"}</button>
+					</div>
 				</FlexContainer>
 			</Form>
 		)
