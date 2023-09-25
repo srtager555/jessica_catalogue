@@ -136,6 +136,7 @@ function CardRender({
 			weight={data.weight}
 			price={data.price}
 			brand={data.brand}
+			cate={data.category}
 			imagePath={image}
 		/>
 	);
