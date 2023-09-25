@@ -43,8 +43,8 @@ export default function Edit() {
 		const { productName, price, weight, brand, category } = target;
 		const data = {
 			name: productName.value,
-			price: price.value,
-			weight: weight.value,
+			price: Number(price.value),
+			weight: Number(weight.value),
 			brand: brand.value,
 			category: category.value,
 		};
@@ -69,7 +69,13 @@ export default function Edit() {
 		const snapshot = await getDocs(q);
 
 		if (snapshot.docs.length > 0) {
-			if (data.category === currentData.data().category) {
+			const conditions = [
+				data.category === currentData.data().category,
+				data.price === currentData.data().price,
+				data.weight === currentData.data().weight,
+				data.brand === currentData.data().brand,
+			];
+			if (conditions.every((el) => el === true)) {
 				setError("Ya existe un producto con este nombre y marca");
 				return;
 			}
