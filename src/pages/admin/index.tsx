@@ -8,7 +8,6 @@ import { DeleteCat } from "@/components/admin/deleteCat.form";
 import { uploadFile } from "@/tools/storage/uploadFile";
 import { FormProduct } from "@/components/admin/form.product";
 import { Title } from "@/styles/index.styles";
-import { AdminContext } from "@/layout/admin";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
@@ -63,14 +62,20 @@ export default function Add() {
 			return;
 		}
 
-		// adding the product to firebase
-		const data = await addDoc(prodColl, {
+		const content = {
 			name: productName.value,
 			price: price.value,
 			weight: weight.value,
-			category: category.value,
 			brand: brand.value,
-		});
+		};
+
+		if (category.value != "") {
+			// @ts-ignore
+			content.category = category.value;
+		}
+
+		// adding the product to firebase
+		const data = await addDoc(prodColl, content);
 
 		// uploading the image
 		await uploadFile(`products/${data.id}/product`, imageURl);
