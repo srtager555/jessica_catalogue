@@ -182,13 +182,12 @@ export function FormProduct({ callback, edit }: props) {
 				<FlexContainer styles={{ ...flexProps.styles }}>
 					<select
 						name="category"
-						required
 						defaultValue={defaultEditData?.category ? defaultEditData?.category : ""}
 					>
 						{categories?.length > 0 ? (
-							<option>Selecciona una categoria</option>
+							<option value="">Selecciona una categoria</option>
 						) : (
-							<option>No hay categorias</option>
+							<option value="">No hay categorias</option>
 						)}
 						{categories.map((el, i) => (
 							<option key={i} defaultValue={el.name}>
