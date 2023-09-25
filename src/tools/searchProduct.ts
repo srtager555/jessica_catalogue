@@ -3,7 +3,7 @@ import { findBestMatch } from "string-similarity";
 
 type p = QueryDocumentSnapshot<product, DocumentData>[];
 
-export function searchProduct(entry: string, products: p) {
+export function searchProduct(entry: string, products: p, umbr?: number) {
 	if (entry === "") return undefined;
 	else {
 		const umbral = 0.3;
@@ -15,7 +15,7 @@ export function searchProduct(entry: string, products: p) {
 
 		byNameBestMatch.forEach((element) => {
 			const result = products.find(
-				(el) => element.rating > 0.5 && el.data().name === element.target
+				(el) => element.rating > (umbr ?? 0.5) && el.data().name === element.target
 			);
 
 			if (result) byName.push(result);
