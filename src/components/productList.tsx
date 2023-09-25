@@ -1,8 +1,9 @@
 import { useGetProducts } from "@/hooks/useGetProducts";
 import { Title } from "@/styles/index.styles";
+import { searchProduct } from "@/tools/searchProduct";
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -28,6 +29,15 @@ const Select = styled.span`
 	font-style: italic;
 `;
 
+const Input = styled.input`
+	display: block;
+	padding: 15px 10px;
+	border: none;
+	background-color: #fff;
+	width: 100%;
+	margin-bottom: 20px;
+`;
+
 interface props {
 	setProductSelector: Dispatch<
 		SetStateAction<QueryDocumentSnapshot<product, DocumentData> | undefined>
@@ -36,6 +46,7 @@ interface props {
 
 export function ProductList({ setProductSelector }: props) {
 	const productsListener = useGetProducts().snap;
+	const [products, setProducts] = useState<typeof productsListener>([]);
 	const router = useRouter();
 
 	function onClick(snap: QueryDocumentSnapshot<product, DocumentData>) {
@@ -50,16 +61,55 @@ export function ProductList({ setProductSelector }: props) {
 		}
 	}
 
+	function onChange(e: ChangeEvent<HTMLInputElement>) {
+		e.preventDefault();
+		const value = e.target.value;
+
+		if (value === "")
+			setProducts(
+				productsListener
+					.sort((a, b) => {
+						if (typeof a.data().price !== "number") return 1;
+						else if (typeof b.data().price != "number") return 1;
+						else return 0;
+					})
+					.slice(0, 10)
+			);
+		else {
+			setProducts(searchProduct(value, productsListener, 0.2)?.byName ?? []);
+		}
+	}
+
+	useEffect(() => {
+		setProducts(
+			productsListener
+				.sort((a, b) => {
+					if (typeof a.data().price !== "number") return 1;
+					else if (typeof b.data().price != "number") return 1;
+					else return 0;
+				})
+				.slice(0, 10)
+		);
+	}, [productsListener]);
+
 	return (
 		<Container>
 			<Title>Productos</Title>
-			{productsListener.map((el, i) => {
+			<Input onChange={onChange} type="text" placeholder="Buscar producto" />
+			{products.map((el, i) => {
 				const data = el.data();
 
 				return (
 					<Button key={i} onClick={() => onClick(el)}>
 						<div>
-							{data.brand && `${data.brand} | `} {data.name}
+							{data.brand && (
+								<>
+									<span>{data.brand}</span>
+									<br />
+								</>
+							)}
+
+							{data.name}
 							<span style={{ display: "block", marginTop: "5px" }}>
 								{data.price} LPS
 							</span>
