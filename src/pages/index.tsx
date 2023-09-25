@@ -123,10 +123,12 @@ function CardRender({
 
 	useEffect(() => {
 		async function gImage() {
-			setImage(await getImage(`products/${el.id}/product`));
+			if (data.img) setImage(data.img);
+			else setImage(await getImage(`products/${el.id}/product`));
 		}
 
 		gImage();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [el.id]);
 
 	return (
