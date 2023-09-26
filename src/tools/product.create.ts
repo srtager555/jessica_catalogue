@@ -480,17 +480,6 @@ export function lol() {
 	products.forEach(async (el) => {
 		if (!el.img) return;
 
-		async function convertImageToFile(imagePath: string) {
-			return await fetch(imagePath) // Cargamos la imagen desde la ruta
-				.then((response) => response.blob()) // Convertimos la respuesta en un blob
-				.then((blob) => {
-					// Creamos un objeto File a partir del blob
-					return new File([blob], "product.png", {
-						type: "image/png",
-					});
-				});
-		}
-
 		createProduct(
 			{
 				name: el.name,
