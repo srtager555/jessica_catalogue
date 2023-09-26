@@ -168,11 +168,11 @@ const products = [
 		cate: "Res",
 	},
 
-	{ name: "Costilla Premium", peso: 10, img: "/img/products/c.c_30.avif", cate: "Res" },
+	{ name: "Costilla Premium", peso: 10, img: "/img/products/c.c_30.jpg", cate: "Res" },
 	{
 		name: "Costilla Premium Caja",
 		peso: 30,
-		img: "/img/products/c.c_10.avif",
+		img: "/img/products/c.c_10.jpg",
 		cate: "Res",
 	},
 
