@@ -92,7 +92,9 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 			<DataBox>
 				<span className={roboto.className}>{brand}</span>
 				<div>
-					{cate != "" && <span className={roboto.className}>{cate} - </span>}
+					{typeof cate != "undefined" && (
+						<span className={roboto.className}>{cate} - </span>
+					)}
 					<span className={roboto.className}>LPS {price}</span>
 				</div>
 			</DataBox>
