@@ -190,7 +190,7 @@ export function InputImage(props: props) {
 							ref={inputFileRef}
 							onChange={handlerOnChange}
 							type="file"
-							accept=".jpg, .png, .jpeg"
+							accept=".jpg, .png, .jpeg, .webp"
 						/>
 					</ImageContainer>
 					{!previewImage &&
