@@ -80,7 +80,7 @@ export function FormProduct({ callback, edit }: props) {
 					if (adminContext?.productSelector?.id) {
 						const desertRef = ref(
 							storage,
-							`products/${adminContext.productSelector.id}/product`
+							`products/${adminContext.productSelector.id}/`
 						);
 
 						await deleteObject(desertRef).then(() => {
@@ -124,11 +124,15 @@ export function FormProduct({ callback, edit }: props) {
 			if (!product) return;
 
 			setDefaultEditData(product.data());
-			const url = product.data().img
-				? product.data().img
-				: await getImage(`/products/${product.id}/product`);
 
-			setDefaultImage(url);
+			console.log(process.env.NODE_ENV === "development");
+			if (process.env.NODE_ENV === "development") {
+				setDefaultImage(await getImage(`products/${product.id}/product`));
+			} else {
+				setDefaultImage(
+					await getImage(`products/${product.id}/thumbnails/product_300x300`)
+				);
+			}
 
 			setRefreshInputs(true);
 		}
