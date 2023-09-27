@@ -1,7 +1,9 @@
 import { Bebas_Neue, Roboto } from "next/font/google";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+import loader from "@/../public/loader.gif";
 
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
@@ -58,6 +60,33 @@ const ImageBox = styled.div<{ cheight: number }>`
 	background-color: #fff;
 `;
 
+const LC = styled.div<{ cargando: boolean }>`
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	transition: 1000ms ease-in;
+	background-color: #fff;
+
+	${({ cargando }) => {
+		if (cargando)
+			return css`
+				opacity: 1;
+			`;
+		else
+			return css`
+				opacity: 0;
+			`;
+	}}
+`;
+const Loader = styled(Image)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+`;
+
 interface props {
 	name: string;
 	price: number;
@@ -68,6 +97,7 @@ interface props {
 }
 
 export function ProductCard({ name, price, weight, brand, cate, imagePath }: props) {
+	const [loading, setLoading] = useState(true);
 	const [height, setHeight] = useState<number>(0);
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -106,15 +136,34 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 			</TitleBox>
 			<ImageBox ref={ref} cheight={height}>
 				{imagePath && (
-					<Image
-						src={imagePath}
-						layout="responsive"
-						width={1500}
-						height={300}
-						placeholder="blur"
-						blurDataURL={imagePath}
-						alt={name}
-					/>
+					<>
+						<LC cargando={loading}>
+							<Loader
+								src="/loader.gif"
+								width={100}
+								height={100}
+								style={{
+									maxWidth: "100%",
+									height: "auto",
+								}}
+								alt=""
+							/>
+						</LC>
+						<Image
+							src={imagePath}
+							layout="responsive"
+							width={1500}
+							height={300}
+							onLoad={() => {
+								setLoading(false);
+							}}
+							alt={name}
+							style={{
+								maxWidth: "100%",
+								height: "auto",
+							}}
+						/>
+					</>
 				)}
 			</ImageBox>
 		</Card>
