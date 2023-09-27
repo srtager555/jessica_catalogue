@@ -16,6 +16,8 @@ import { Firestore } from "@/tools/firestore";
 import { AdminContext } from "@/layout/admin";
 import { getImage } from "@/tools/storage/getImage";
 import { useRouter } from "next/router";
+import { Storage } from "@/tools/storage";
+import { deleteObject, ref } from "firebase/storage";
 
 const flexProps = {
 	styles: {
@@ -59,6 +61,7 @@ export function FormProduct({ callback, edit }: props) {
 	const [categories, setCategories] = useState<cate[]>([]);
 	const [error, setError] = useState<string>();
 	const db = Firestore();
+	const storage = Storage();
 	const router = useRouter();
 	const adminContext = useContext(AdminContext);
 
@@ -72,9 +75,20 @@ export function FormProduct({ callback, edit }: props) {
 		e.preventDefault();
 
 		if (adminContext?.productSelector?.id) {
-			await deleteDoc(doc(db, "/products/" + adminContext.productSelector.id));
+			await deleteDoc(doc(db, "/products/" + adminContext.productSelector.id)).then(
+				async () => {
+					if (adminContext?.productSelector?.id) {
+						const desertRef = ref(
+							storage,
+							`products/${adminContext.productSelector.id}/product`
+						);
 
-			router.push("/admin/");
+						await deleteObject(desertRef).then(() => {
+							router.push("/admin/");
+						});
+					}
+				}
+			);
 		}
 	}
 
@@ -174,7 +188,7 @@ export function FormProduct({ callback, edit }: props) {
 								/>
 								<Input
 									type="number"
-									required={!edit}
+									// required={!edit}
 									name="price"
 									defaultValue={
 										defaultEditData?.price ? defaultEditData?.price : ""
