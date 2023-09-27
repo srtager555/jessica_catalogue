@@ -117,12 +117,12 @@ function CardRender({
 
 	useEffect(() => {
 		async function gImage() {
-			if (data.img) setImage(data.img);
-			else setImage(await getImage(`products/${el.id}/product`));
+			console.log(process.env.NODE_ENV === "development");
+
+			setImage(await getImage(`products/${el.id}/thumbnails/product_300x300`));
 		}
 
 		gImage();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [el.id]);
 
 	return (
