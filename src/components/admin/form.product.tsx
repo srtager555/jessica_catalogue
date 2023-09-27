@@ -125,14 +125,7 @@ export function FormProduct({ callback, edit }: props) {
 
 			setDefaultEditData(product.data());
 
-			console.log(process.env.NODE_ENV === "development");
-			if (process.env.NODE_ENV === "development") {
-				setDefaultImage(await getImage(`products/${product.id}/product`));
-			} else {
-				setDefaultImage(
-					await getImage(`products/${product.id}/thumbnails/product_300x300`)
-				);
-			}
+			await getImage(`products/${product.id}/thumbnails/product_50x50`);
 
 			setRefreshInputs(true);
 		}
