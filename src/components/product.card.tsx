@@ -1,9 +1,6 @@
 import { Bebas_Neue, Roboto } from "next/font/google";
-import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-
-import loader from "@/../public/loader.gif";
 
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
@@ -80,7 +77,7 @@ const LC = styled.div<{ cargando: boolean }>`
 			`;
 	}}
 `;
-const Loader = styled(Image)`
+const Loader = styled.img`
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -138,6 +135,7 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 				{imagePath && (
 					<>
 						<LC cargando={loading}>
+							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<Loader
 								src="/loader.gif"
 								width={100}
@@ -149,10 +147,10 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 								alt=""
 							/>
 						</LC>
-						<Image
+						{/* eslint-disable-next-line @next/next/no-img-element */}
+						<img
 							src={imagePath}
-							layout="responsive"
-							width={1500}
+							width={300}
 							height={300}
 							onLoad={() => {
 								setLoading(false);

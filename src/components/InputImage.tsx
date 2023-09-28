@@ -4,7 +4,7 @@ import { Crop, PixelCrop } from "react-image-crop";
 import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useRef, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { ButtonNormal, ContainerGOD, FlexContainer, SquareImage } from "@/styles/index.styles";
+import { ButtonNormal, ContainerGOD, FlexContainer, Square } from "@/styles/index.styles";
 import {
 	ImageContainer,
 	InputContainer,
@@ -176,7 +176,10 @@ export function InputImage(props: props) {
 							}}
 						>
 							{previewImage ? (
-								<SquareImage src={previewImage} alt="" />
+								<Square>
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src={previewImage} alt="" />
+								</Square>
 							) : (
 								<Image
 									width="48"
