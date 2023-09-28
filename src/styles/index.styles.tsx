@@ -1,6 +1,5 @@
 /* eslint-disable react/display-name */
 import { Bebas_Neue } from "next/font/google";
-import Image, { ImageProps } from "next/image";
 import { MutableRefObject, forwardRef, LegacyRef } from "react";
 import styled, {
 	CSSObject,
@@ -214,7 +213,7 @@ export const FlexContainer = styled(StyledDiv)`
 	display: flex;
 `;
 
-const Square = styled.div`
+export const Square = styled.div`
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -222,13 +221,18 @@ const Square = styled.div`
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+
+	& img {
+		width: 100%;
+	}
 `;
 
-export const SquareImage = (props: ImageProps) => (
-	<Square>
-		<Image {...props} fill style={{ objectFit: "cover" }} alt={props.alt} />
-	</Square>
-);
+// export const SquareImage = (props: HTMLImageElement) => (
+// 	<Square>
+// 		{/* eslint-disable-next-line @next/next/no-img-element */}
+// 		<img {...props} style={{ objectFit: "cover" }} alt={props.alt} />
+// 	</Square>
+// );
 
 export const Form = styled.form`
 	width: 100%;
