@@ -125,7 +125,7 @@ export function FormProduct({ callback, edit }: props) {
 
 			setDefaultEditData(product.data());
 
-			await getImage(`products/${product.id}/thumbnails/product_50x50`);
+			setDefaultImage(await getImage(`/products/${product.id}/thumbnails/product_300x300`));
 
 			setRefreshInputs(true);
 		}
