@@ -119,7 +119,7 @@ function CardRender({
 		async function gImage() {
 			console.log(process.env.NODE_ENV === "development");
 
-			setImage(await getImage(`products/${el.id}/thumbnails/product_300x300`));
+			setImage(await getImage(`/products/${el.id}/thumbnails/product_300x300`));
 		}
 
 		gImage();
