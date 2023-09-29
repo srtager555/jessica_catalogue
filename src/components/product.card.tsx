@@ -55,6 +55,10 @@ const ImageBox = styled.div<{ cheight: number }>`
 	height: ${({ cheight }) => cheight}px;
 	overflow: hidden;
 	background-color: #fff;
+
+	& img {
+		width: 100%;
+	}
 `;
 
 const LC = styled.div<{ cargando: boolean }>`
@@ -76,6 +80,10 @@ const LC = styled.div<{ cargando: boolean }>`
 				opacity: 0;
 			`;
 	}}
+
+	& img {
+		width: 100px;
+	}
 `;
 const Loader = styled.img`
 	position: absolute;
@@ -136,30 +144,15 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 					<>
 						<LC cargando={loading}>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
-							<Loader
-								src="/loader.gif"
-								width={100}
-								height={100}
-								style={{
-									maxWidth: "100%",
-									height: "auto",
-								}}
-								alt=""
-							/>
+							<Loader src="/loader.gif" alt="" />
 						</LC>
 						{/* eslint-disable-next-line @next/next/no-img-element */}
 						<img
 							src={imagePath}
-							width={300}
-							height={300}
 							onLoad={() => {
 								setLoading(false);
 							}}
 							alt={name}
-							style={{
-								maxWidth: "100%",
-								height: "auto",
-							}}
 						/>
 					</>
 				)}
