@@ -43,6 +43,7 @@ const Input = styled.input<{ m?: boolean }>`
 `;
 
 interface props {
+	loading: boolean;
 	callback: (
 		e: FormEvent,
 		imageURl: File | undefined,
@@ -52,7 +53,7 @@ interface props {
 	edit?: boolean;
 }
 
-export function FormProduct({ callback, edit }: props) {
+export function FormProduct({ loading, callback, edit }: props) {
 	const [defaultEditData, setDefaultEditData] = useState<product>();
 	const [defaultImage, setDefaultImage] = useState<string>();
 	const [imageURl, setImageUrl] = useState<File>();
@@ -156,7 +157,13 @@ export function FormProduct({ callback, edit }: props) {
 		<>Para comenzar debes de seleccionar un producto a la izquierda</>
 	) : (
 		!refreshInputs && (
-			<Form onSubmit={onSubmit} style={{ marginBottom: "100px" }}>
+			<Form
+				// @ts-ignore
+				disabled={loading}
+				loading={loading}
+				onSubmit={onSubmit}
+				style={{ marginBottom: "100px" }}
+			>
 				{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
 				<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
 					{!refreshImage && (
@@ -169,9 +176,9 @@ export function FormProduct({ callback, edit }: props) {
 					<Container>
 						<div>
 							<Names>Nombre</Names>
-							<Names>Precio</Names>
+							<Names>Precio (opcional)</Names>
 							<Names>Peso en libras</Names>
-							<Names>Marca (optional)</Names>
+							<Names>Marca (opcional)</Names>
 						</div>
 						<div>
 							<>
