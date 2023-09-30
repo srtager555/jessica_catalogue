@@ -234,12 +234,21 @@ export const Square = styled.div`
 // 	</Square>
 // );
 
-export const Form = styled.form`
+export const Form = styled.form<{ loading: boolean }>`
 	width: 100%;
 	padding: 30px;
 	margin-bottom: 20px;
 	background-color: #fff;
 	border-radius: 20px;
+	transition: 200ms ease-in;
+
+	${({ loading }) => {
+		if (loading)
+			return css`
+				opacity: 0;
+				cursor: not-allowed;
+			`;
+	}}
 `;
 
 export const Input = styled.input<{ m?: boolean }>`
