@@ -6,7 +6,7 @@ import { uploadFile } from "@/tools/storage/uploadFile";
 import { collection, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { isEqual } from "lodash";
 import { Roboto } from "next/font/google";
-import { Dispatch, FormEvent, SetStateAction, useContext } from "react";
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react";
 import styled from "styled-components";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
@@ -19,6 +19,7 @@ const Box = styled.div`
 `;
 
 export default function Edit() {
+	const [loading, setLoading] = useState(false);
 	const adminContext = useContext(AdminContext);
 	const db = Firestore();
 
@@ -54,6 +55,7 @@ export default function Edit() {
 
 		if (changes) {
 			setError("No se dectectaron cambios");
+			setLoading(false);
 
 			return;
 		}
@@ -77,6 +79,8 @@ export default function Edit() {
 			];
 			if (conditions.every((el) => el === true)) {
 				setError("Ya existe un producto con este nombre y marca");
+				setLoading(false);
+
 				return;
 			}
 		}
@@ -92,12 +96,13 @@ export default function Edit() {
 
 		// restoring the error catcher
 		setError(undefined);
+		setLoading(true);
 	}
 
 	return (
 		<Box>
 			<Title>Editar un productor</Title>
-			<FormProduct callback={edit} edit />
+			<FormProduct loading={loading} callback={edit} edit />
 		</Box>
 	);
 }

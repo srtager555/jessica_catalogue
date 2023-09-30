@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Roboto } from "next/font/google";
-import { Dispatch, FormEvent, SetStateAction, useContext, useEffect } from "react";
+import { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState } from "react";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { Firestore } from "@/tools/firestore";
 import { CreateCategory } from "@/components/admin/createCat.form";
@@ -19,6 +19,7 @@ const Box = styled.div`
 `;
 
 export default function Add() {
+	const [loading, setLoading] = useState(false);
 	const db = Firestore();
 
 	async function createProduct(
@@ -28,6 +29,7 @@ export default function Add() {
 		setRefreshImage: Dispatch<SetStateAction<boolean>>
 	) {
 		e.preventDefault();
+		setLoading(true);
 
 		const target = e.currentTarget as typeof e.currentTarget & {
 			productName: HTMLInputElement;
@@ -41,6 +43,7 @@ export default function Add() {
 
 		if (!imageURl) {
 			setError("El producto debe de llevar una imagen");
+			setLoading(false);
 
 			return;
 		}
@@ -58,13 +61,14 @@ export default function Add() {
 
 		if (snapshot.docs.length > 0) {
 			setError("Ya existe un producto con este nombre y marca");
+			setLoading(false);
 
 			return;
 		}
 
 		const content = {
 			name: productName.value,
-			price: price.value,
+			price: Number(price.value),
 			weight: weight.value,
 			brand: brand.value,
 		};
@@ -85,12 +89,13 @@ export default function Add() {
 		e.target.reset();
 		setError(undefined);
 		setRefreshImage(true);
+		setLoading(false);
 	}
 
 	return (
 		<Box>
 			<Title>Añadir producto</Title>
-			<FormProduct callback={createProduct} />
+			<FormProduct loading={loading} callback={createProduct} />
 			<CreateCategory />
 			<DeleteCat />
 		</Box>
