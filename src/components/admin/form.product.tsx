@@ -171,6 +171,7 @@ export function FormProduct({ loading, callback, edit }: props) {
 							setImageUrl={setImageUrl}
 							customImageName="image"
 							previewImage={defaultImage}
+							ratio={1 / 1.2}
 						/>
 					)}
 					<Container>
