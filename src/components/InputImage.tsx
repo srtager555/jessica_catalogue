@@ -176,11 +176,17 @@ export function InputImage(props: props) {
 							}}
 						>
 							{previewImage ? (
-								<Square>
+								// <Square>
+								<>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img src={previewImage} alt="" />
-								</Square>
+									<img
+										style={{ width: "100%", objectFit: "contain" }}
+										src={previewImage}
+										alt=""
+									/>
+								</>
 							) : (
+								// </Square>
 								<Image
 									width="48"
 									height="48"
