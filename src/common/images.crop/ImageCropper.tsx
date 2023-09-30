@@ -124,7 +124,13 @@ export function ImageCropper({
 				onComplete={(c) => setCompletedCrop(c)}
 				aspect={aspect}
 			>
-				<img ref={imgRef} alt="Crop me" src={imageSrc} onLoad={onImageLoad} />
+				<img
+					style={{ maxHeight: "80vh" }}
+					ref={imgRef}
+					alt="Crop me"
+					src={imageSrc}
+					onLoad={onImageLoad}
+				/>
 			</ReactCrop>
 			<SpaceBeetwenContainer
 				styles={{
