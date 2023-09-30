@@ -172,6 +172,9 @@ export function FormProduct({ loading, callback, edit }: props) {
 							customImageName="image"
 							previewImage={defaultImage}
 							ratio={1 / 1.2}
+							height="auto"
+							minHeight="110px"
+							// minWidth="110px"
 						/>
 					)}
 					<Container>
