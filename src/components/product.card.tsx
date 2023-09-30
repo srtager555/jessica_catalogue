@@ -57,6 +57,7 @@ const ImageBox = styled.div<{ cheight: number }>`
 	background-color: #fff;
 
 	& img {
+		display: inline-block;
 		width: 100%;
 	}
 `;
@@ -104,13 +105,15 @@ interface props {
 export function ProductCard({ name, price, weight, brand, cate, imagePath }: props) {
 	const [loading, setLoading] = useState(true);
 	const [height, setHeight] = useState<number>(0);
-	const ref = useRef<HTMLDivElement>(null);
+	const [move, setMove] = useState({ transform: "scale(1.1) translateY(0)" });
+	const ref2 = useRef<HTMLDivElement>(null);
+	const imgRef = useRef<HTMLImageElement>(null);
 
 	useEffect(() => {
 		function height() {
-			if (!ref.current) return;
+			if (!ref2.current) return;
 
-			setHeight(ref.current.clientWidth);
+			setHeight(ref2.current.clientWidth);
 		}
 
 		height();
@@ -122,15 +125,31 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 		};
 	}, []);
 
+	useEffect(() => {
+		function scrollEffect() {
+			const img = imgRef.current;
+			if (!img) return;
+
+			setMove({
+				transform: `translateY(${(img.getBoundingClientRect().top / 10) * -1}px)`,
+			});
+		}
+
+		scrollEffect();
+
+		window.addEventListener("scroll", scrollEffect);
+
+		return () => window.removeEventListener("scroll", scrollEffect);
+	}, []);
+
 	return (
 		<Card>
 			<DataBox>
 				<span className={roboto.className}>{brand}</span>
 				<div>
-					{typeof cate != "undefined" && (
-						<span className={roboto.className}>{cate} - </span>
-					)}
-					<span className={roboto.className}>LPS {price}</span>
+					<span className={roboto.className}>{cate}</span>
+					{price && cate ? <> - </> : <></>}
+					{price > 0 && <span className={roboto.className}>LPS {price}</span>}
 				</div>
 			</DataBox>
 			<TitleBox>
@@ -139,7 +158,7 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 					{weight} {weight > 1 ? "LBS" : "LB"}
 				</Weight>
 			</TitleBox>
-			<ImageBox ref={ref} cheight={height}>
+			<ImageBox ref={ref2} cheight={height}>
 				{imagePath && (
 					<>
 						<LC cargando={loading}>
@@ -152,6 +171,8 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 							onLoad={() => {
 								setLoading(false);
 							}}
+							style={move}
+							ref={imgRef}
 							alt={name}
 						/>
 					</>
