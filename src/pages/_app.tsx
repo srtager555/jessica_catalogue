@@ -5,6 +5,7 @@ import { connectAuthEmulator, getAuth } from "firebase/auth";
 import "@/styles/globals.css";
 import { Background } from "@/styles/index.styles";
 import { AdminLayout } from "@/layout/admin";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
 	initializeApp({
@@ -31,6 +32,14 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<>
+			<Head>
+				<title>Carnicería Rodriguez</title>
+				<link rel="icon" type="image/x-icon" href="/redpoint.png" />
+				<meta
+					name="description"
+					content="Carnes, lacteos y mas en nuestro catálogo en linea"
+				/>
+			</Head>
 			<Background />
 			<AdminLayout>
 				<Component {...pageProps} />
