@@ -27,6 +27,10 @@ const Input = styled.input`
 	text-align: center;
 `;
 
+const Logo = styled.img`
+	width: 150px;
+`;
+
 interface props {
 	setEntry: Dispatch<SetStateAction<string>>;
 }
@@ -50,7 +54,10 @@ export function Nav({ setEntry }: props) {
 					flexDirection: "column",
 				}}
 			>
-				<Title className={BebasNeue.className}>Carnicería Rodriguez</Title>
+				<Logo src="/CR_logo_border_small.png" />
+				<Title style={{ textAlign: "center" }} className={BebasNeue.className}>
+					Carnicería Rodriguez
+				</Title>
 				<Input
 					onChange={onChange}
 					className={roboto.className}
