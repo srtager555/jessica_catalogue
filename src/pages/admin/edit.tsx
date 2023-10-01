@@ -3,7 +3,16 @@ import { AdminContext } from "@/layout/admin";
 import { Title } from "@/styles/index.styles";
 import { Firestore } from "@/tools/firestore";
 import { uploadFile } from "@/tools/storage/uploadFile";
-import { collection, getDocs, query, updateDoc, where } from "firebase/firestore";
+import {
+	DocumentData,
+	QueryDocumentSnapshot,
+	collection,
+	getDoc,
+	getDocs,
+	query,
+	updateDoc,
+	where,
+} from "firebase/firestore";
 import { isEqual } from "lodash";
 import { Roboto } from "next/font/google";
 import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react";
@@ -20,15 +29,16 @@ const Box = styled.div`
 
 export default function Edit() {
 	const [loading, setLoading] = useState(false);
+	const [lastImage, setLastImage] = useState<File>();
 	const adminContext = useContext(AdminContext);
 	const db = Firestore();
 
 	async function edit(
 		e: FormEvent,
 		imageURl: File | undefined,
-		setError: Dispatch<SetStateAction<string | undefined>>,
-		setRefreshImage: Dispatch<SetStateAction<boolean>>
+		setError: Dispatch<SetStateAction<string | undefined>>
 	) {
+		setLoading(true);
 		const currentData = adminContext?.productSelector;
 
 		if (!currentData) return;
@@ -51,7 +61,7 @@ export default function Edit() {
 		};
 
 		// comprobation to check changes
-		const changes = isEqual(data, currentData.data()) && typeof imageURl === "undefined";
+		const changes = isEqual(data, currentData.data()) && isEqual(imageURl, lastImage);
 
 		if (changes) {
 			setError("No se dectectaron cambios");
@@ -70,33 +80,34 @@ export default function Edit() {
 		);
 		const snapshot = await getDocs(q);
 
-		if (snapshot.docs.length > 0) {
-			const conditions = [
-				data.category === currentData.data().category,
-				data.price === currentData.data().price,
-				data.weight === currentData.data().weight,
-				data.brand === currentData.data().brand,
-			];
-			if (conditions.every((el) => el === true)) {
-				setError("Ya existe un producto con este nombre y marca");
-				setLoading(false);
+		const equaldocs = snapshot.docs.filter((el) => el.id != currentData.id);
 
-				return;
-			}
+		if (equaldocs.length > 0) {
+			setError("Ya existe un producto con este nombre y marca");
+			setLoading(false);
+
+			return;
 		}
 
 		// uploading the new data
 		if (!isEqual(data, currentData.data())) {
 			await updateDoc(currentData.ref, data);
+
+			const newCurretData = await getDoc(currentData.ref);
+
+			adminContext?.setProductSelector(
+				newCurretData as unknown as QueryDocumentSnapshot<product, DocumentData>
+			);
 		}
 
-		if (imageURl) {
+		if (imageURl && !isEqual(imageURl, lastImage)) {
 			await uploadFile(`/products/${currentData.id}/product`, imageURl);
+			setLastImage(imageURl);
 		}
 
 		// restoring the error catcher
 		setError(undefined);
-		setLoading(true);
+		setLoading(false);
 	}
 
 	return (
