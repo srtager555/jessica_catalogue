@@ -106,7 +106,7 @@ interface props {
 export function ProductCard({ name, price, weight, brand, cate, imagePath }: props) {
 	const [loading, setLoading] = useState(true);
 	const [height, setHeight] = useState<number>(0);
-	const [move, setMove] = useState({ transform: "scale(1.1) translateY(0)" });
+	const [move, setMove] = useState({ transform: "translateY(0)" });
 	const ref2 = useRef<HTMLDivElement>(null);
 	const imgRef = useRef<HTMLImageElement>(null);
 
