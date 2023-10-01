@@ -234,7 +234,7 @@ export const Square = styled.div`
 // 	</Square>
 // );
 
-export const Form = styled.form<{ loading: boolean }>`
+export const Form = styled.form<{ loading?: boolean }>`
 	width: 100%;
 	padding: 30px;
 	margin-bottom: 20px;
