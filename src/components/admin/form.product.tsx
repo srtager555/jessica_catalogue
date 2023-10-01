@@ -167,15 +167,18 @@ export function FormProduct({ loading, callback, edit }: props) {
 				{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
 				<FlexContainer styles={{ ...flexProps.styles, marginBottom: "40px" }}>
 					{!refreshImage && (
-						<InputImage
-							setImageUrl={setImageUrl}
-							customImageName="image"
-							previewImage={defaultImage}
-							ratio={1 / 1.2}
-							height="auto"
-							minHeight="110px"
-							// minWidth="110px"
-						/>
+						<div style={{ height: "130px" }}>
+							<InputImage
+								borderRadius="10px"
+								setImageUrl={setImageUrl}
+								customImageName="image"
+								previewImage={defaultImage}
+								ratio={1 / 1.2}
+								height="100%"
+								minHeight="130px"
+								// minWidth="110px"
+							/>
+						</div>
 					)}
 					<Container>
 						<div>
