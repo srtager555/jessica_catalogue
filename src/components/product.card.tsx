@@ -1,5 +1,6 @@
 import { Bebas_Neue, Roboto } from "next/font/google";
 import { useRef, useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import styled, { css } from "styled-components";
 
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
@@ -135,11 +136,14 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 			});
 		}
 
-		scrollEffect();
+		if (isMobile) {
+			scrollEffect();
+			window.addEventListener("scroll", scrollEffect);
+		}
 
-		window.addEventListener("scroll", scrollEffect);
-
-		return () => window.removeEventListener("scroll", scrollEffect);
+		return () => {
+			if (isMobile) window.removeEventListener("scroll", scrollEffect);
+		};
 	}, []);
 
 	return (
