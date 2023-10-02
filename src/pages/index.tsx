@@ -21,7 +21,6 @@ export default function Home() {
 	const [entryResult, setEntryResult] = useState<{ byName: p; byBrand: p; byCate: p }>();
 	const [entry, setEntry] = useState<string>("");
 	const productsListener = useGetProducts();
-	const db = Firestore();
 
 	useEffect(() => {
 		const result = searchProduct(entry, products);
@@ -33,22 +32,31 @@ export default function Home() {
 		if (products.length > 0) {
 			const featured = products.filter((el) => el.data().featured);
 
-			if (featured.length < 10) {
-				const sortedProducts = products.sort((a, b) => {
-					if (a.data().name > b.data().name) {
-						return 1;
-					}
-					if (a.data().name < b.data().name) {
-						return -1;
-					}
-					// a must be equal to b
-					return 0;
-				});
+			const sortedProducts = products.sort((a, b) => {
+				if (a.data().name > b.data().name) {
+					return 1;
+				}
+				if (a.data().name < b.data().name) {
+					return -1;
+				}
+				// a must be equal to b
+				return 0;
+			});
 
-				setFeatured([...featured, ...sortedProducts.slice(0, 10 - featured.length)]);
-			} else {
-				setFeatured(featured);
-			}
+			const sortedFeatured = featured.sort((prev, next) => {
+				if (prev.data().name > next.data().name) {
+					return 1;
+				}
+				if (prev.data().name < next.data().name) {
+					return -1;
+				}
+				// a must be equal to b
+				return 0;
+			});
+
+			if (featured.length < 10)
+				setFeatured([...sortedFeatured, ...sortedProducts.slice(0, 10 - featured.length)]);
+			else setFeatured(sortedFeatured);
 		}
 	}, [products]);
 
@@ -117,8 +125,6 @@ function CardRender({
 
 	useEffect(() => {
 		async function gImage() {
-			console.log(process.env.NODE_ENV === "development");
-
 			setImage(await getImage(`/products/${el.id}/thumbnails/product_300x300`));
 		}
 
