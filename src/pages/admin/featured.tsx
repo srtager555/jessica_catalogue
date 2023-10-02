@@ -17,7 +17,7 @@ import {
 } from "firebase/firestore";
 import { Roboto } from "next/font/google";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
@@ -64,6 +64,7 @@ const PInfo = styled.div`
 `;
 
 export default function Featured() {
+	const [error, setError] = useState<string>();
 	const [first, setFirst] = useState(true);
 	const [featuredProducts, setFeaturedProducts] = useState<
 		QueryDocumentSnapshot<product, DocumentData>[]
@@ -72,9 +73,21 @@ export default function Featured() {
 	const router = useRouter();
 	const db = Firestore();
 
-	async function addFeatured(p: QueryDocumentSnapshot<product, DocumentData>) {
-		await updateDoc(p.ref, { featured: true });
-	}
+	const addFeatured = useCallback(
+		async (p: QueryDocumentSnapshot<product, DocumentData>) => {
+			const q = query(collection(db, "/products"), where("featured", "==", true));
+			const products = await getDocs(q);
+
+			if (products.docs.length < 10) {
+				await updateDoc(p.ref, { featured: true });
+
+				if (error) setError(undefined);
+			} else {
+				setError("Maximo de destacados añadidos");
+			}
+		},
+		[db, error]
+	);
 
 	useEffect(() => {
 		if (
@@ -98,6 +111,7 @@ export default function Featured() {
 		router.asPath,
 		adminContext,
 		first,
+		addFeatured,
 	]);
 
 	useEffect(() => {
@@ -107,7 +121,18 @@ export default function Featured() {
 			const q = query(snap.query, where("featured", "==", true));
 			const d = (await getDocs(q)).docs;
 
-			setFeaturedProducts(d);
+			const s = d.sort((prev, next) => {
+				if (prev.data().name > next.data().name) {
+					return 1;
+				}
+				if (prev.data().name < next.data().name) {
+					return -1;
+				}
+				// a must be equal to b
+				return 0;
+			});
+
+			setFeaturedProducts(s);
 		});
 
 		return () => unsub();
@@ -127,6 +152,7 @@ export default function Featured() {
 					<li>Para agregar un producto solo tienes que seleccionarlo a la izquierda</li>
 				</ul>
 			</div>
+			{error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
 			<FBox>
 				{featuredProducts.map((el, i) => (
 					<FeaturedComponent key={i} data={el} />
@@ -151,7 +177,7 @@ const FeaturedComponent = ({ data }: props) => {
 
 	useEffect(() => {
 		async function getImg() {
-			setImage(await getImage(`/products/${data.id}/product`));
+			setImage(await getImage(`/products/${data.id}/thumbnails/product_300x300`));
 		}
 
 		getImg();
