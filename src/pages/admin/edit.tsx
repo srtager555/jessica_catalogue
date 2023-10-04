@@ -73,9 +73,11 @@ export default function Edit() {
 		// comprobation to avoid issues of equal products
 		const prodColl = collection(db, "/products");
 
+		// This query is to avoid repeat products
 		const q = query(
 			prodColl,
 			where("name", "==", productName.value),
+			where("category", "==", category.value),
 			where("brand", "==", brand.value)
 		);
 		const snapshot = await getDocs(q);
@@ -83,7 +85,7 @@ export default function Edit() {
 		const equaldocs = snapshot.docs.filter((el) => el.id != currentData.id);
 
 		if (equaldocs.length > 0) {
-			setError("Ya existe un producto con este nombre y marca");
+			setError("Ya existe un producto con este nombre, categoría y marca");
 			setLoading(false);
 
 			return;

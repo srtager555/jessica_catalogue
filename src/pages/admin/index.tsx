@@ -50,11 +50,11 @@ export default function Add() {
 
 		const prodColl = collection(db, "/products");
 
-		// comprobation to avoid issues in the images
-
+		// comprobation to avoid issues of equal products
 		const q = query(
 			prodColl,
 			where("name", "==", productName.value),
+			where("category", "==", category.value),
 			where("brand", "==", brand.value)
 		);
 		const snapshot = await getDocs(q);
