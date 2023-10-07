@@ -131,15 +131,5 @@ function CardRender({
 		gImage();
 	}, [el.id]);
 
-	return (
-		<ProductCard
-			key={index}
-			name={data.name}
-			weight={data.weight}
-			price={data.price}
-			brand={data.brand}
-			cate={data.category}
-			imagePath={image}
-		/>
-	);
+	return <ProductCard data={el} key={index} imagePath={image} />;
 }
