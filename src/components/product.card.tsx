@@ -1,4 +1,6 @@
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 import { Bebas_Neue, Roboto } from "next/font/google";
+import { useRouter } from "next/router";
 import { useRef, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import styled, { css } from "styled-components";
@@ -6,10 +8,18 @@ import styled, { css } from "styled-components";
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
-const Card = styled.div`
+const Card = styled.button`
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
 	width: 300px;
 	justify-self: center;
 	margin-bottom: 30px;
+	transition: 200ms ease;
+
+	&:active {
+		transform: scale(0.9);
+	}
 
 	@media (max-width: 700px) {
 		width: 250px;
@@ -95,20 +105,22 @@ const Loader = styled.img`
 `;
 
 interface props {
-	name: string;
-	price: number;
-	weight: number;
-	brand?: string;
-	cate: string;
+	data: QueryDocumentSnapshot<product, DocumentData>;
 	imagePath?: string;
 }
 
-export function ProductCard({ name, price, weight, brand, cate, imagePath }: props) {
+export function ProductCard({ data, imagePath }: props) {
+	const { name, price, weight, brand, category: cate } = data.data();
 	const [loading, setLoading] = useState(true);
 	const [height, setHeight] = useState<number>(0);
 	const [move, setMove] = useState({ transform: "translateY(0)" });
 	const ref2 = useRef<HTMLDivElement>(null);
 	const imgRef = useRef<HTMLImageElement>(null);
+	const router = useRouter();
+
+	function productRedirect() {
+		router.push("/product/" + data.id);
+	}
 
 	useEffect(() => {
 		function height() {
@@ -147,7 +159,7 @@ export function ProductCard({ name, price, weight, brand, cate, imagePath }: pro
 	}, []);
 
 	return (
-		<Card>
+		<Card onClick={productRedirect}>
 			<DataBox>
 				<span className={roboto.className}>{brand}</span>
 				<div>
