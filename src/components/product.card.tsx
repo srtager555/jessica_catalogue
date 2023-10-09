@@ -119,7 +119,7 @@ export function ProductCard({ data, imagePath }: props) {
 	const router = useRouter();
 
 	function productRedirect() {
-		router.push("/product/" + data.id);
+		router.push("/products/" + data.id);
 	}
 
 	useEffect(() => {
