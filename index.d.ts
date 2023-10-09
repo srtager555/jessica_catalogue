@@ -9,4 +9,5 @@ interface product {
 	category: string;
 	brand?: string;
 	img?: string;
+	minValue?: number;
 }
