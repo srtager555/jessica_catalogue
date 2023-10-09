@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "catalog-36868"
+  },
+  "targets": {},
+  "etags": {
+    "catalog-36868": {
+      "extensionInstances": {
+        "storage-resize-images": "3ea73438e457d3035d0839cfbfc8342d4f18d84f523b187e04b93e994748a720"
+      }
+    }
   }
 }
