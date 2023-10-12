@@ -8,18 +8,23 @@ import styled, { css } from "styled-components";
 const BebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
-const Card = styled.button`
+const Card = styled.button<{ off: boolean }>`
 	background-color: transparent;
 	border: none;
-	cursor: pointer;
 	width: 300px;
 	justify-self: center;
 	margin-bottom: 30px;
 	transition: 200ms ease;
 
-	&:active {
-		transform: scale(0.9);
-	}
+	${({ off }) => {
+		if (!off)
+			return css`
+				cursor: pointer;
+				&:active {
+					transform: scale(0.9);
+				}
+			`;
+	}}
 
 	@media (max-width: 700px) {
 		width: 250px;
@@ -110,6 +115,7 @@ interface props {
 }
 
 export function ProductCard({ data, imagePath }: props) {
+	const disableButton = true;
 	const { name, price, weight, brand, category: cate } = data.data();
 	const [loading, setLoading] = useState(true);
 	const [height, setHeight] = useState<number>(0);
@@ -119,7 +125,7 @@ export function ProductCard({ data, imagePath }: props) {
 	const router = useRouter();
 
 	function productRedirect() {
-		router.push("/products/" + data.id);
+		if (!disableButton) router.push("/products/" + data.id);
 	}
 
 	useEffect(() => {
@@ -159,7 +165,7 @@ export function ProductCard({ data, imagePath }: props) {
 	}, []);
 
 	return (
-		<Card onClick={productRedirect}>
+		<Card off={true} onClick={productRedirect}>
 			<DataBox>
 				<span className={roboto.className}>{brand}</span>
 				<div>
