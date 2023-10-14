@@ -25,6 +25,10 @@ const Input = styled.input`
 	border-bottom: 1px solid #000;
 	background-color: transparent;
 	text-align: center;
+
+	@media (prefers-color-scheme: dark) {
+		border-bottom: 1px solid #fff;
+	}
 `;
 
 const Logo = styled.img`
