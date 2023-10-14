@@ -23,6 +23,10 @@ const Button = styled.button`
 	padding: 10px 20px;
 	margin-bottom: 10px;
 	cursor: pointer;
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #001620;
+	}
 `;
 
 const Select = styled.span`
@@ -36,6 +40,10 @@ const Input = styled.input`
 	background-color: #fff;
 	width: 100%;
 	margin-bottom: 20px;
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #001620;
+	}
 `;
 
 interface props {

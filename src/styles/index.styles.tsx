@@ -249,6 +249,10 @@ export const Form = styled.form<{ loading?: boolean }>`
 				cursor: not-allowed;
 			`;
 	}}
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #001620;
+	}
 `;
 
 export const Input = styled.input<{ m?: boolean }>`

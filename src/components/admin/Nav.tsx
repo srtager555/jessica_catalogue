@@ -64,6 +64,10 @@ const Links = styled(Link)<{ active: boolean }>`
 				color: gray;
 			`;
 	}}
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #001620;
+	}
 `;
 
 interface link {
