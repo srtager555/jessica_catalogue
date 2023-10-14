@@ -41,6 +41,8 @@ export function AdminLayout({ children }: props) {
 			"/admin/edit/",
 			"/admin/featured",
 			"/admin/featured/",
+			"/admin/cataloge",
+			"/admin/cataloge/",
 		];
 		const conditional = matches.some((el) => path.match(el));
 
