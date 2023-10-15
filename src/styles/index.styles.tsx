@@ -36,6 +36,10 @@ export const Background = styled.div`
 	width: 100%;
 	background: linear-gradient(45deg, var(--bg-color) 0%, var(--bg-color-2) 100%);
 	z-index: -1;
+
+	@media print {
+		background: #fff;
+	}
 `;
 
 export const Button = styled.button`
