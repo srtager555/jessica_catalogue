@@ -34,17 +34,9 @@ export function AdminLayout({ children }: props) {
 
 	useEffect(() => {
 		const path = router.asPath;
-		const matches = [
-			"/admin",
-			"/admin/",
-			"/admin/edit",
-			"/admin/edit/",
-			"/admin/featured",
-			"/admin/featured/",
-			"/admin/cataloge",
-			"/admin/cataloge/",
-		];
-		const conditional = matches.some((el) => path.match(el));
+
+		const matches = ["/admin", "/admin/edit", "/admin/featured"];
+		const conditional = matches.some((el) => el === path);
 
 		if (conditional) setShow(true);
 		else setShow(false);
