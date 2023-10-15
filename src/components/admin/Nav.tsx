@@ -38,7 +38,7 @@ export function Nav() {
 				<LinkStyled href="">Añadir productos</LinkStyled>
 				<LinkStyled href="edit">Editar productos</LinkStyled>
 				<LinkStyled href="featured">productos Destacados</LinkStyled>
-				<LinkStyled href="cataloge">Catálogo</LinkStyled>
+				{/* <LinkStyled href="cataloge">Catálogo</LinkStyled> */}
 			</LinksContainer>
 		</Container>
 	);
