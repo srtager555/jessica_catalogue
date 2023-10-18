@@ -26,9 +26,9 @@ const Input = styled.input`
 	background-color: transparent;
 	text-align: center;
 
-	@media (prefers-color-scheme: dark) {
+	/* @media (prefers-color-scheme: dark) {
 		border-bottom: 1px solid #fff;
-	}
+	} */
 `;
 
 const Logo = styled.img`

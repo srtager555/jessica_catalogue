@@ -9,16 +9,20 @@
 	--color: #000;
 }
 
-@media (prefers-color-scheme: dark) {
+body {
+	background-color: #fff;
+}
+
+/* @media (prefers-color-scheme: dark) {
 	:root {
 		--bg-color: rgb(8, 4, 29);
 		--bg-color-2: rgb(44, 2, 23);
 		--color: #fff;
 	}
-}
+} */
 
-@media (prefers-color-scheme: dark) {
-	html {
+/* @media (prefers-color-scheme: dark) {
+	/* html {
 		color-scheme: dark;
-	}
-}
+	} 
+} */

@@ -61,10 +61,10 @@ const PInfo = styled.div`
 	border-top-left-radius: 10px;
 	background-color: #fff;
 	padding: 10px 5px;
-
+	/* 
 	@media (prefers-color-scheme: dark) {
 		background-color: #001620;
-	}
+	} */
 `;
 
 export default function Featured() {
