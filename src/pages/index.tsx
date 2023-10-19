@@ -1,8 +1,9 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
-import { Container, ProductContainer, Title, TitleH3 } from "@/styles/index.styles";
+import { ProductContainer, Title } from "@/styles/index.styles";
+import styled from "styled-components";
+import { useInView } from "react-intersection-observer";
 import { Nav } from "@/components/Nav";
-import { Firestore } from "@/tools/firestore";
 import { ProductCard } from "@/components/product.card";
 import { searchProduct } from "@/tools/searchProduct";
 import { useGetProducts } from "@/hooks/useGetProducts";
@@ -15,12 +16,36 @@ const titleStyles: CSSProperties = {
 	textAlign: "center",
 };
 
+const Container = styled.div`
+	position: relative;
+	width: 100%;
+	min-height: 110vh;
+	padding: 10px;
+	padding-bottom: 10%;
+`;
+
+const Charger = styled.div`
+	position: absolute;
+	bottom: 0%;
+	left: 0%;
+	height: 10vh;
+	width: 100%;
+`;
+
 export default function Home() {
 	const [products, setProducts] = useState<p>([]);
 	const [featured, setFeatured] = useState<p>([]);
+	const [productsLength, setProductsLength] = useState(10);
 	const [entryResult, setEntryResult] = useState<{ byName: p; byBrand: p; byCate: p }>();
 	const [entry, setEntry] = useState<string>("");
 	const productsListener = useGetProducts();
+	const {
+		ref,
+		inView,
+		entry: entryData,
+	} = useInView({
+		threshold: 0,
+	});
 
 	useEffect(() => {
 		const result = searchProduct(entry, products);
@@ -54,15 +79,24 @@ export default function Home() {
 				return 0;
 			});
 
-			if (featured.length < 10)
-				setFeatured([...sortedFeatured, ...sortedProducts.slice(0, 10 - featured.length)]);
-			else setFeatured(sortedFeatured);
+			// if (featured.length < 10)
+			// 	setFeatured([...sortedFeatured, ...sortedProducts.slice(0, 10 - featured.length)]);
+			// else
+			setFeatured(sortedProducts.slice(0, productsLength));
 		}
-	}, [products]);
+	}, [products, productsLength]);
 
 	useEffect(() => {
 		setProducts(productsListener.snap);
 	}, [productsListener.snap]);
+
+	useEffect(() => {
+		if (!inView) return;
+
+		if (productsLength + 10 <= products.length) setProductsLength(productsLength + 10);
+		else setProductsLength(products.length - productsLength);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [inView]);
 
 	return (
 		<>
@@ -102,11 +136,14 @@ export default function Home() {
 						)}
 					</div>
 				) : (
-					<ProductContainer>
-						{featured.map((el, index) => (
-							<CardRender key={index} el={el} index={index} />
-						))}
-					</ProductContainer>
+					<>
+						<ProductContainer>
+							{featured.map((el, index) => (
+								<CardRender key={index} el={el} index={index} />
+							))}
+						</ProductContainer>
+						<Charger ref={ref}></Charger>
+					</>
 				)}
 			</Container>
 		</>
