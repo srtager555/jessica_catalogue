@@ -26,6 +26,7 @@ export const ProductContainer = styled.div`
 	align-items: flex-start;
 	flex-wrap: wrap;
 	width: 100%;
+	min-height: 100%;
 `;
 
 export const Background = styled.div`
