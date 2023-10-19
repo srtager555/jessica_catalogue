@@ -43,6 +43,15 @@ export const Background = styled.div`
 	@media print {
 		background: #fff;
 	}
+
+	@media (min-width: 1080px) {
+		background: radial-gradient(
+			135.94% 144.39% at 50% 29.87%,
+			rgba(243, 49, 103, 0) 17.94%,
+			rgba(243, 49, 103, 0.26) 42.99%,
+			#e50f5c 68.92%
+		);
+	}
 `;
 
 export const Button = styled.button`
