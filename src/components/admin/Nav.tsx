@@ -54,7 +54,9 @@ const Links = styled(Link)<{ active: boolean }>`
 	background-color: #fff;
 	margin: 0 auto;
 	border-radius: 10px;
+	border: solid 1px var(--bg-color);
 	transition: 200ms;
+
 	${({ active }) => {
 		if (active)
 			return css`

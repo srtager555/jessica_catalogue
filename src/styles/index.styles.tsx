@@ -247,6 +247,7 @@ export const Form = styled.form<{ loading?: boolean }>`
 	margin-bottom: 20px;
 	background-color: #fff;
 	border-radius: 20px;
+	border: 1px solid var(--bg-color);
 	transition: 200ms ease-in;
 
 	${({ loading }) => {

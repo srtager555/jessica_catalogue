@@ -18,7 +18,7 @@ const Button = styled.button`
 	width: 100%;
 	text-align: start;
 	background-color: #fff;
-	border: none;
+	border: solid 1px var(--bg-color);
 	border-radius: 10px;
 	padding: 10px 20px;
 	margin-bottom: 10px;
@@ -36,8 +36,10 @@ const Select = styled.span`
 const Input = styled.input`
 	display: block;
 	padding: 15px 10px;
-	border: none;
+
 	background-color: #fff;
+	border-radius: 10px;
+	border: solid 1px var(--bg-color);
 	width: 100%;
 	margin-bottom: 20px;
 
