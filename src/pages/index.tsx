@@ -21,14 +21,18 @@ const Container = styled.div`
 	width: 100%;
 	min-height: 110vh;
 	padding: 10px;
-	padding-bottom: 10%;
+	margin-bottom: 20%;
+
+	@media (max-width: 900px) {
+		margin-bottom: 40%;
+	} ;
 `;
 
 const Charger = styled.div`
 	position: absolute;
 	bottom: 0%;
 	left: 0%;
-	height: 10vh;
+	height: 100vh;
 	width: 100%;
 `;
 
@@ -93,8 +97,14 @@ export default function Home() {
 	useEffect(() => {
 		if (!inView) return;
 
-		if (productsLength + 10 <= products.length) setProductsLength(productsLength + 10);
-		else setProductsLength(productsLength + products.length - productsLength);
+		if (productsLength + 10 <= products.length) {
+			setProductsLength(productsLength + 10);
+		} else {
+			const result = productsLength + products.length - productsLength;
+
+			if (result === 0) setProductsLength(10);
+			else setProductsLength(result);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inView]);
 
