@@ -25,8 +25,8 @@ const Button = styled.button`
 	cursor: pointer;
 
 	/* @media (prefers-color-scheme: dark) {
-		background-color: #001620;
-	} */
+			background-color: #001620;
+		} */
 `;
 
 const Select = styled.span`

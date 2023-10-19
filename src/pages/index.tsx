@@ -94,7 +94,7 @@ export default function Home() {
 		if (!inView) return;
 
 		if (productsLength + 10 <= products.length) setProductsLength(productsLength + 10);
-		else setProductsLength(products.length - productsLength);
+		else setProductsLength(productsLength + products.length - productsLength);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inView]);
 
