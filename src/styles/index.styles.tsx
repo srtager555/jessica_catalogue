@@ -35,8 +35,11 @@ export const Background = styled.div`
 	left: 0;
 	height: 100vh;
 	width: 100%;
-	background: linear-gradient(45deg, var(--bg-color) 0%, var(--bg-color-2) 100%);
-	z-index: -1;
+	background: linear-gradient(65deg, var(--bg-color) -15%, #ffffff00 50%);
+	/* background: linear-gradient(45deg, var(--bg-color) 0%, var(--bg-color-2) 100%); */
+	z-index: 10;
+	pointer-events: none;
+
 	@media print {
 		background: #fff;
 	}
