@@ -64,11 +64,9 @@ const Links = styled(Link)<{ active: boolean }>`
 			return css`
 				color: gray;
 			`;
-	}}
-
-	@media (prefers-color-scheme: dark) {
+	}}/* @media (prefers-color-scheme: dark) {
 		background-color: #001620;
-	}
+	} */
 `;
 
 interface link {

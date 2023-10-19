@@ -24,9 +24,9 @@ const Button = styled.button`
 	margin-bottom: 10px;
 	cursor: pointer;
 
-	@media (prefers-color-scheme: dark) {
+	/* @media (prefers-color-scheme: dark) {
 		background-color: #001620;
-	}
+	} */
 `;
 
 const Select = styled.span`
@@ -41,9 +41,9 @@ const Input = styled.input`
 	width: 100%;
 	margin-bottom: 20px;
 
-	@media (prefers-color-scheme: dark) {
+	/* @media (prefers-color-scheme: dark) {
 		background-color: #001620;
-	}
+	} */
 `;
 
 interface props {
