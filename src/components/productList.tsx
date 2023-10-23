@@ -112,6 +112,12 @@ export function ProductList({ setProductSelector }: props) {
 				return (
 					<Button key={i} onClick={() => onClick(el)}>
 						<div>
+							{data.category && (
+								<>
+									<span>{data.category}</span>
+									<br />
+								</>
+							)}
 							{data.brand && (
 								<>
 									<span>{data.brand}</span>
