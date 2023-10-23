@@ -21,7 +21,7 @@ const Container = styled.div`
 	width: 100%;
 	min-height: 110vh;
 	padding: 10px;
-	margin-bottom: 20%;
+	padding-bottom: 20%;
 
 	@media (max-width: 900px) {
 		margin-bottom: 40%;
@@ -32,7 +32,7 @@ const Charger = styled.div`
 	position: absolute;
 	bottom: 0%;
 	left: 0%;
-	height: 100vh;
+	height: 70vh;
 	width: 100%;
 `;
 

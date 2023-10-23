@@ -108,7 +108,7 @@ export default function Products() {
 
 			const imagePath = await getImage("/products/" + id + "/thumbnails/product_300x300");
 
-			setImagePath(imagePath);
+			if (imagePath) setImagePath(imagePath);
 		}
 
 		image();
