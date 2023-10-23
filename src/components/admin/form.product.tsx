@@ -79,14 +79,16 @@ export function FormProduct({ loading, callback, edit }: props) {
 			await deleteDoc(doc(db, "/products/" + adminContext.productSelector.id)).then(
 				async () => {
 					if (adminContext?.productSelector?.id) {
-						const desertRef = ref(
+						const thumbnailsImageRef300x300 = ref(
 							storage,
-							`products/${adminContext.productSelector.id}/`
+							`products/${adminContext.productSelector.id}/thumbnails/product_300x300`
 						);
 
-						await deleteObject(desertRef).then(() => {
-							router.push("/admin/");
-						});
+						await deleteObject(thumbnailsImageRef300x300)
+							.then(() => {
+								router.push("/admin/");
+							})
+							.catch((e) => console.log(e));
 					}
 				}
 			);
@@ -132,7 +134,7 @@ export function FormProduct({ loading, callback, edit }: props) {
 		}
 
 		getProduct();
-	}, [adminContext?.productSelector, db]);
+	}, [adminContext?.productSelector]);
 
 	useEffect(() => {
 		if (router.asPath != "/admin/edit") return;
