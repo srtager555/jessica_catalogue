@@ -1,4 +1,5 @@
 import { LogIn } from "@/components/Login";
+import { Logout } from "@/components/Logout";
 import { Nav } from "@/components/admin/Nav";
 import { ProductList } from "@/components/productList";
 import { useAuthUserListener } from "@/hooks/useAuth";
@@ -49,6 +50,7 @@ export function AdminLayout({ children }: props) {
 	return (
 		<AdminContext.Provider value={{ productSelector, setProductSelector }}>
 			<Container>
+				<Logout />
 				<Nav />
 				<Content>
 					<ProductList setProductSelector={setProductSelector} />
