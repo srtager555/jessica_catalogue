@@ -11,5 +11,7 @@ export async function getImage(refPath: string) {
 
 	const imageRef = ref(storage, refPath);
 
-	return await getDownloadURL(imageRef);
+	return await getDownloadURL(imageRef)
+		.then((data) => data)
+		.catch(() => undefined);
 }
